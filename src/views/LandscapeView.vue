@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import ProjectCard from '../components/ProjectCard.vue'
 
 // Mock data for landscape projects - will be replaced with API data later
 const projects = ref([
@@ -25,100 +26,115 @@ const projects = ref([
 </script>
 
 <template>
-  <div class="category-view">
-    <h1 class="category-title">Ландшафт</h1>
-    
-    <div class="projects-container">
-      <div v-for="project in projects" :key="project.id" class="project-card">
-        <div class="project-image">
-          <img :src="project.image" :alt="project.title">
-        </div>
-        <div class="project-info">
-          <h2 class="project-title">{{ project.title }}</h2>
-          <p class="project-description">{{ project.description }}</p>
+  <div class="landscape-page">
+    <section class="hero">
+      <h1 class="title">Ландшафт</h1>
+      <p class="subtitle">Превращаем пространство в произведение искусства</p>
+    </section>
+
+    <section class="projects">
+      <div class="container">
+        <div class="grid">
+          <ProjectCard
+            v-for="(project, index) in projects"
+            :key="index"
+            :image="project.image"
+            :title="project.title"
+            :description="project.description"
+          />
         </div>
       </div>
-    </div>
+    </section>
+
+    <section class="about">
+      <div class="container">
+        <h2>Наш подход к ландшафтному дизайну</h2>
+        <div class="content">
+          <p>Мы создаем уникальные ландшафтные проекты, которые гармонично сочетают природную красоту с современными решениями. Наша команда специалистов учитывает все особенности участка и пожелания клиента.</p>
+          <p>От концепции до реализации - мы сопровождаем каждый этап проекта, обеспечивая высокое качество и внимание к деталям. Наши ландшафты не только красивы, но и функциональны, экологичны и просты в уходе.</p>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <style scoped>
-.category-view {
-  padding: 40px 0;
+.landscape-page {
+  padding-top: 80px;
 }
 
-.category-title {
-  font-size: 2rem;
-  margin-bottom: 40px;
-  font-weight: 500;
-}
-
-.projects-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 40px;
-}
-
-.project-card {
+.hero {
+  height: 60vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/src/assets/project1.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  margin-bottom: 4rem;
 }
 
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+.title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
-.project-image {
-  width: 100%;
-  height: 220px;
-  overflow: hidden;
+.subtitle {
+  font-size: 1.5rem;
+  opacity: 0.9;
 }
 
-.project-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-.project-card:hover .project-image img {
-  transform: scale(1.05);
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
 }
 
-.project-info {
-  padding: 20px;
+.about {
+  padding: 4rem 0;
+  background-color: #f8f9fa;
 }
 
-.project-title {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  font-weight: 500;
+.about h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
-.project-description {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.5;
+.content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
 }
 
 @media (max-width: 768px) {
-  .category-view {
-    padding: 30px 0;
+  .title {
+    font-size: 3rem;
   }
   
-  .category-title {
-    font-size: 1.8rem;
-    margin-bottom: 30px;
+  .subtitle {
+    font-size: 1.2rem;
   }
   
-  .projects-container {
+  .content {
     grid-template-columns: 1fr;
-    gap: 30px;
   }
 }
 </style>

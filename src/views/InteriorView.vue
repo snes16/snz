@@ -1,124 +1,156 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import ProjectCard from '../components/ProjectCard.vue'
 
 // Mock data for interior projects - will be replaced with API data later
 const projects = ref([
   {
     id: 1,
     title: 'Минималистичная квартира',
-    image: 'https://placehold.co/600x400?text=Интерьер+1',
-    description: 'Современный интерьер с чистыми линиями и функциональным пространством.'
+    image: 'https://placehold.co/1200x800?text=Интерьер+1',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 2,
     title: 'Загородный дом',
-    image: 'https://placehold.co/600x400?text=Интерьер+2',
-    description: 'Уютный интерьер с использованием натуральных материалов и текстур.'
+    image: 'https://placehold.co/1200x800?text=Интерьер+2',
+    description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
   },
   {
     id: 3,
     title: 'Офисное пространство',
-    image: 'https://placehold.co/600x400?text=Интерьер+3',
-    description: 'Креативное рабочее пространство, способствующее продуктивности и комфорту.'
+    image: 'https://placehold.co/1200x800?text=Интерьер+3',
+    description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
   }
 ]);
 </script>
 
 <template>
-  <div class="category-view">
-    <h1 class="category-title">Интерьер</h1>
-    
-    <div class="projects-container">
-      <div v-for="project in projects" :key="project.id" class="project-card">
-        <div class="project-image">
-          <img :src="project.image" :alt="project.title">
-        </div>
-        <div class="project-info">
-          <h2 class="project-title">{{ project.title }}</h2>
-          <p class="project-description">{{ project.description }}</p>
+  <div class="interior-page">
+    <section class="hero">
+      <h1 class="title">Интерьер</h1>
+      <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+    </section>
+
+    <section class="projects">
+      <div class="container">
+        <div class="projects-list">
+          <ProjectCard
+            v-for="(project, index) in projects"
+            :key="index"
+            :image="project.image"
+            :title="project.title"
+            :description="project.description"
+          />
         </div>
       </div>
-    </div>
+    </section>
+
+    <section class="about">
+      <div class="container">
+        <h2>О нашем подходе</h2>
+        <div class="content">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <style scoped>
-.category-view {
-  padding: 40px 0;
+.interior-page {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 80px;
+  overflow-y: auto;
 }
 
-.category-title {
-  font-size: 2rem;
-  margin-bottom: 40px;
-  font-weight: 500;
-}
-
-.projects-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 40px;
-}
-
-.project-card {
+.hero {
+  height: 50vh;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/src/assets/project1.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  margin-bottom: 4rem;
 }
 
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+.title {
+  font-size: 3rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
 }
 
-.project-image {
-  width: 100%;
-  height: 220px;
-  overflow: hidden;
-}
-
-.project-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.project-card:hover .project-image img {
-  transform: scale(1.05);
-}
-
-.project-info {
-  padding: 20px;
-}
-
-.project-title {
+.subtitle {
   font-size: 1.2rem;
-  margin-bottom: 10px;
-  font-weight: 500;
+  opacity: 0.9;
+  font-weight: 300;
 }
 
-.project-description {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.5;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  width: 100%;
+}
+
+.about {
+  padding: 4rem 0;
+  background-color: #fafafa;
+}
+
+.about h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  font-weight: 300;
 }
 
 @media (max-width: 768px) {
-  .category-view {
-    padding: 30px 0;
+  .title {
+    font-size: 2.5rem;
   }
   
-  .category-title {
-    font-size: 1.8rem;
-    margin-bottom: 30px;
+  .subtitle {
+    font-size: 1.1rem;
   }
   
-  .projects-container {
+  .content {
     grid-template-columns: 1fr;
-    gap: 30px;
+  }
+  
+  .hero {
+    height: 40vh;
   }
 }
 </style>

@@ -78,6 +78,7 @@ function update(t) {
         const yc = .5 * (trail[i].y + trail[i + 1].y);
         ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
         ctx.lineWidth = params.widthFactor * (params.pointsNumber - i);
+        ctx.strokeStyle = `rgba(255, 105, 180, ${1 - i/params.pointsNumber})`; // Розовый цвет с прозрачностью
         ctx.stroke();
     }
     ctx.lineTo(trail[trail.length - 1].x, trail[trail.length - 1].y);

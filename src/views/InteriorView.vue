@@ -62,7 +62,6 @@ const projects = ref([
 .interior-page {
   width: 100%;
   min-height: 100vh;
-  padding-top: 80px;
   overflow-y: auto;
 }
 

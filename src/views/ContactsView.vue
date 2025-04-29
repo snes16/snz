@@ -1,129 +1,136 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <div class="contacts-view">
-    <h1 class="contacts-title">Контакты</h1>
-    
-    <div class="contacts-content">
-      <div class="contact-info">
-        <h2>SnZ Project</h2>
-        <p>Проектное бюро в Алматы</p>
-        <p>Адрес: г. Алматы, ул. Примерная, 123</p>
-        <p>Телефон: +7 (777) 123-45-67</p>
-        <p>Email: info@snzproject.kz</p>
-      </div>
-      
-      <div class="contact-form">
-        <h2>Связаться с нами</h2>
-        <form>
-          <div class="form-group">
-            <label for="name">Имя</label>
-            <input type="text" id="name" name="name" required>
+  <div class="contact-page">
+    <div class="contact-content">
+      <h1 class="title">СТРАНИЧКА КОНТАКТЫ</h1>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="qr-code">
+            <img src="../assets/qr-code.png" alt="QR Code">
+            <p class="instagram">@snzproject</p>
           </div>
-          
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+
+          <div class="contact-details">
+            <p class="address">
+              Адрес: 050046, Казахстан, Алматы,<br>
+              БЦ Жел Тау, ул. Егизбаева 7В,<br>
+              5 этаж, офис 507/2
+            </p>
+
+            <p class="phone">Тел: +7 707 113 3055</p>
+            <p class="email">E-mail: snzproject@yandex.ru</p>
           </div>
-          
-          <div class="form-group">
-            <label for="message">Сообщение</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-          </div>
-          
-          <button type="submit" class="submit-button">Отправить</button>
-        </form>
+        </div>
+
+        <div class="map-placeholder">
+          <p>ТУТ карта</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.contacts-view {
-  padding: 40px 0;
+.contact-page {
+  min-height: 100vh;
+  background-color: #A3A69B;
+  padding: 2rem;
+  padding-top: calc(80px + 2rem); /* Добавляем отступ для хедера */
+  color: white;
 }
 
-.contacts-title {
-  font-size: 2rem;
-  margin-bottom: 40px;
-  font-weight: 500;
+.contact-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 4rem;
 }
 
-.contacts-content {
+.title {
+  font-family: 'Century Gothic', sans-serif;
+  font-size: 2.5rem;
+  color: #FF69B4;
+  margin-bottom: 4rem;
+}
+
+.contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  gap: 4rem;
+  align-items: start;
 }
 
-.contact-info h2,
-.contact-form h2 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  font-weight: 500;
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
 
-.contact-info p {
-  margin-bottom: 10px;
-  line-height: 1.6;
+.qr-code {
+  text-align: center;
 }
 
-.form-group {
-  margin-bottom: 20px;
+.qr-code img {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1rem;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 500;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-family: inherit;
-  font-size: 1rem;
-}
-
-.submit-button {
-  background-color: #333;
+.instagram {
+  font-size: 1.2rem;
   color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
 }
 
-.submit-button:hover {
-  background-color: #555;
+.contact-details {
+  font-family: 'Century Gothic', sans-serif;
+  line-height: 1.8;
+}
+
+.address, .phone, .email {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.map-placeholder {
+  aspect-ratio: 1;
+  background-color: transparent;
+  border: 2px solid #FF69B4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #FF69B4;
+  position: relative;
+}
+
+.map-placeholder::before,
+.map-placeholder::after {
+  content: '';
+  position: absolute;
+  background-color: #FF69B4;
+  pointer-events: none;
+}
+
+.map-placeholder::before {
+  width: 2px;
+  height: 100%;
+  transform: rotate(45deg);
+}
+
+.map-placeholder::after {
+  width: 2px;
+  height: 100%;
+  transform: rotate(-45deg);
 }
 
 @media (max-width: 768px) {
-  .contacts-view {
-    padding: 30px 0;
-  }
-  
-  .contacts-title {
-    font-size: 1.8rem;
-    margin-bottom: 30px;
-  }
-  
-  .contacts-content {
+  .contact-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
   }
-  
-  .contact-form {
-    order: 2;
-  }
-  
-  .contact-info {
-    order: 1;
+
+  .title {
+    font-size: 2rem;
   }
 }
 </style>
+<script setup lang="ts">
+</script>

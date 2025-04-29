@@ -60,7 +60,7 @@ const projects = ref([
 
 <style scoped>
 .architecture-page {
-  padding-top: 80px;
+
 }
 
 .hero {

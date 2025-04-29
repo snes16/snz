@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ArchitectureView from '../views/ArchitectureView.vue'
 import InteriorView from '../views/InteriorView.vue'
 import LandscapeView from '../views/LandscapeView.vue'
-import ContactsView from '../views/ContactsView.vue'
+import ContactView from '../views/ContactView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,7 +31,7 @@ const router = createRouter({
     {
       path: '/contacts',
       name: 'contacts',
-      component: ContactsView
+      component: ContactView
     }
   ]
 })

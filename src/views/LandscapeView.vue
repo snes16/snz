@@ -60,7 +60,6 @@ const projects = ref([
 
 <style scoped>
 .landscape-page {
-  padding-top: 80px;
 }
 
 .hero {

@@ -33,15 +33,15 @@ import { ref, onMounted } from 'vue';
 // Placeholder images until API endpoint is provided
 const images = ref([
   { 
-    url: 'https://via.placeholder.com/600x400?text=Architecture+Project+1', 
+    url: 'https://snzproject.com/wp-content/uploads/2023/12/m1.png',
     alt: 'Architecture Project 1' 
   },
   { 
-    url: 'https://via.placeholder.com/600x400?text=Interior+Design+1', 
+    url: 'https://snzproject.com/wp-content/uploads/2023/12/spalnya-1-2.png',
     alt: 'Interior Design 1' 
   },
   { 
-    url: 'https://via.placeholder.com/600x400?text=Landscape+Project+1', 
+    url: 'https://snzproject.com/wp-content/uploads/2023/12/ek2.png',
     alt: 'Landscape Project 1' 
   },
 ]);
@@ -78,15 +78,17 @@ onMounted(() => {
 <style scoped>
 .slider-container {
   position: relative;
-  width: 100%;
+  width: 600px;
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-inline: auto;
 }
 
 .slider-wrapper {
   position: relative;
-  height: 400px;
+  height: 600px;
+  width: 600px;
 }
 
 .slide {
@@ -118,13 +120,14 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  height: 50px;
 }
 
 .control {
   background-color: rgba(255, 255, 255, 0.7);
   border: none;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;

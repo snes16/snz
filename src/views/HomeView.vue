@@ -22,19 +22,21 @@ import ImageSlider from '../components/ImageSlider.vue';
 <style scoped>
 .main-content {
   display: flex;
-  margin-top: 60px;
   gap: 40px;
   align-items: center;
+  height: 800px;
 }
 
 .description {
   flex: 1;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   line-height: 1.6;
+  margin-left: 120px;
 }
 
 .slider {
   flex: 1;
+  width: 600px;
 }
 
 /* Tablet styles */

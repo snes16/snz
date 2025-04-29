@@ -195,21 +195,67 @@ const handleLeave = () => {
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    gap: 2rem;
+  .header {
+    padding: 20px 1rem;
   }
-  
+
+  .nav {
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-link {
+    font-size: 1.2rem;
+  }
+
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    margin-top: 10px;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .dropdown-item {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    color: white;
+  }
+
+  .logo {
+    margin: 1rem 0;
+    order: -1;
+  }
+
+  .logo img {
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 15px 0.5rem;
+  }
+
   .nav-link {
     font-size: 1.1rem;
   }
-  
-  .dropdown-menu {
-    position: fixed;
-    top: auto;
-    left: 0;
-    right: 0;
-    width: 100%;
-    border-radius: 0;
+
+  .dropdown-item {
+    font-size: 0.9rem;
+  }
+
+  .logo img {
+    height: 50px;
   }
 }
 </style> 

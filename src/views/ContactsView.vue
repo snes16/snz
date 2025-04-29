@@ -6,7 +6,6 @@
       <div class="contact-grid">
         <div class="contact-info">
           <div class="qr-code">
-            <img src="../assets/qr-code.png" alt="QR Code">
             <p class="instagram">@snzproject</p>
           </div>
 

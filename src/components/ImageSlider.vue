@@ -61,7 +61,6 @@ const goToSlide = (index: number) => {
   currentIndex.value = index;
 };
 
-// Auto-advance slides
 let intervalId: number;
 
 onMounted(() => {

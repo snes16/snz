@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 // Заменяем стандартный импорт на импорт через CDN
 // import gsap from 'gsap';
 
@@ -103,7 +104,7 @@ function animate(target: string, duration: number, properties: any) {
 
 let order = [0, 1, 2, 3, 4];
 let detailsEven = true;
-let set;
+let set: ((targets: any, vars: any) => any) | undefined;
 
 let offsetTop = 200;
 let offsetLeft = 700;
@@ -400,6 +401,8 @@ async function start() {
   }
 }
 
+const router = useRouter();
+
 onMounted(async () => {
   const demoElement = _('demo');
   if (demoElement) {
@@ -428,91 +431,81 @@ onMounted(async () => {
     });
   }
   
+  // Добавляем обработчики для навигации
+  const setupNavigation = () => {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Удаляем активный класс у всех ссылок
+        navLinks.forEach(l => l.classList.remove('active'));
+        
+        // Добавляем активный класс текущей ссылке
+        link.classList.add('active');
+        
+        // Переходим по указанному маршруту
+        const href = link.getAttribute('href');
+        if (href) {
+          router.push(href);
+        }
+      });
+    });
+    
+    // Добавляем обработчик для логотипа
+    const logoLink = document.querySelector('.logo-link');
+    if (logoLink) {
+      logoLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Активируем ссылку "Главная"
+        const homeLink = document.querySelector('.nav-link[href="/"]');
+        if (homeLink) {
+          // Удаляем активный класс у всех ссылок
+          navLinks.forEach(l => l.classList.remove('active'));
+          
+          // Добавляем активный класс ссылке "Главная"
+          homeLink.classList.add('active');
+        }
+        
+        // Переходим на главную страницу
+        router.push('/');
+      });
+    }
+  };
+  
+  // Запускаем настройку навигации после небольшой задержки,
+  // чтобы DOM успел загрузиться
+  setTimeout(setupNavigation, 100);
+  
   await start();
 });
 </script>
 
 <template>
-  <div class="root-container">
+  <div class="app-container">
     <div class="indicator"></div>
-
+    
     <nav>
       <div>
-        <img src="https://snzproject.com/wp-content/uploads/2023/12/snz_logo_-1.png"
-             alt="SNZ"
-             style="height: 100px"
-        />
+        <a href="/" class="logo-link">
+          <img src="https://snzproject.com/wp-content/uploads/2023/12/snz_logo_-1.png"
+              alt="SNZ"
+              style="height: 120px"
+          />
+        </a>
       </div>
-      <div>
-        <div class="active">Главная</div>
-        <div>Архитектура</div>
-        <div>Интерьер</div>
-        <div>Ландшафты</div>
-        <div>Контакты</div>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Главная</a>
+        <a href="/architecture" class="nav-link">Архитектура</a>
+        <a href="/interior" class="nav-link">Интерьер</a>
+        <a href="/landscape" class="nav-link">Ландшафты</a>
+        <a href="/contacts" class="nav-link">Контакты</a>
       </div>
     </nav>
-
-    <div id="demo"></div>
-
-    <div style="color: black">
-    <div class="details" id="details-even">
-      <div class="place-box">
-        <div class="text"></div>
-      </div>
-      <div class="title-box-1"><div class="title-1">SAINT</div></div>
-      <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
-      <div class="desc">
-      </div>
-    </div>
-
-    <div class="details" id="details-odd">
-      <div class="place-box">
-      </div>
-      <div class="title-box-1"><div class="title-1">SAINT </div></div>
-      <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
-      <div class="desc">
-      </div>
-    </div>
-
-    <div class="pagination" id="pagination">
-      <div class="arrow arrow-left" style="display: none">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M15.75 19.5L8.25 12l7.5-7.5"
-          />
-        </svg>
-      </div>
-      <div class="arrow arrow-right" style="display: none">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M8.25 4.5l7.5 7.5-7.5 7.5"
-          />
-        </svg>
-      </div>
-      <div class="progress-sub-container" >
-        <div class="progress-sub-background" >
-            <div class="progress-sub-foreground" ></div>
-        </div>
-      </div>
-      <div class="slide-numbers" id="slide-numbers"></div>
-    </div>
-    </div>
-
-    <div class="cover" ></div>
+    
+    <!-- Здесь будет отображаться содержимое маршрутов -->
+    <router-view />
   </div>
 </template>
 
@@ -537,6 +530,12 @@ body {
   position: relative;
   overflow: hidden;
   font-family: "Inter", sans-serif;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
 }
 
 .card {
@@ -686,8 +685,10 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 36px;
+  padding: 30px 50px;
   font-weight: 500;
+  background-color: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(5px);
 }
 
 nav svg {
@@ -709,30 +710,58 @@ nav > div {
 }
 
 nav > div:first-child {
-  gap: 10px;
+  gap: 20px;
+  margin-right: 40px;
 }
 
-nav > div:last-child {
-  gap: 24px;
+/* Обновленные стили для навигации */
+.nav-links {
+  gap: 50px;
 }
 
-nav > div:last-child > div {
-  cursor: pointer;
-}
-
-nav > div:last-child > .active {
+.nav-link {
+  color: var(--text-color);
+  text-decoration: none;
   position: relative;
+  cursor: pointer;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  padding-bottom: 4px;
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 
-nav > div:last-child > .active:after {
-  bottom: -8px;
-  left: 0;
-  right: 0;
+.nav-link:hover {
+  opacity: 1;
+  color: var(--primary-color);
+}
+
+.nav-link::after {
+  content: '';
   position: absolute;
-  content: "";
-  height: 3px;
-  border-radius: 99px;
+  bottom: -6px;
+  left: 0;
+  width: 0;
+  height: 4px;
   background-color: var(--primary-color);
+  transition: width 0.3s ease;
+  border-radius: 99px;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
+.logo-link {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
 }
 
 .indicator {

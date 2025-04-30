@@ -1,6 +1,31 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import gsap from 'gsap';
+// Заменяем стандартный импорт на импорт через CDN
+// import gsap from 'gsap';
+
+// Добавляем объявление типа для window.gsap
+declare global {
+  interface Window {
+    gsap: any;
+  }
+}
+
+// Добавляем CDN скрипт для GSAP
+const loadGSAP = () => {
+  return new Promise((resolve) => {
+    if (window.gsap) {
+      resolve(window.gsap);
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js';
+    script.onload = () => resolve(window.gsap);
+    document.head.appendChild(script);
+  });
+};
+
+let gsap: any;
 
 const data = [
   {
@@ -40,35 +65,34 @@ const data = [
   },
 ];
 
-const _ = (id) => document.getElementById(id);
-const cards = data.map((i, index) => `<div class="card" id="card${index}" style="background-image:url(${i.image})"></div>`).join('');
+const _ = (id: string): HTMLElement | null => document.getElementById(id);
+const cards = data.map((i, index: number) => `<div class="card" id="card${index}" style="background-image:url(${i.image})"></div>`).join('');
 
-const cardContents = data.map((i, index) => `<div class="card-content" id="card-content-${index}">
+const cardContents = data.map((i, index: number) => `<div class="card-content" id="card-content-${index}">
 <div class="content-start"></div>
 <div class="content-title-1">${i.title}</div>
 <div class="content-title-2">${i.title2}</div>
 </div>`).join('');
 
-const sildeNumbers = data.map((_, index) => `<div class="item" id="slide-item-${index}">${index+1}</div>`).join('');
+const sildeNumbers = data.map((_, index: number) => `<div class="item" id="slide-item-${index}">${index+1}</div>`).join('');
 
-const range = (n) =>
+const range = (n: number) =>
   Array(n)
     .fill(0)
     .map((i, j) => i + j);
-const set = gsap.set;
 
-function getCard(index) {
+function getCard(index: number): string {
   return `#card${index}`;
 }
-function getCardContent(index) {
+function getCardContent(index: number): string {
   return `#card-content-${index}`;
 }
-function getSliderItem(index) {
+function getSliderItem(index: number): string {
   return `#slide-item-${index}`;
 }
 
-function animate(target, duration, properties) {
-  return new Promise((resolve) => {
+function animate(target: string, duration: number, properties: any) {
+  return new Promise<void>((resolve) => {
     gsap.to(target, {
       ...properties,
       duration: duration,
@@ -79,6 +103,7 @@ function animate(target, duration, properties) {
 
 let order = [0, 1, 2, 3, 4];
 let detailsEven = true;
+let set;
 
 let offsetTop = 200;
 let offsetLeft = 700;
@@ -89,6 +114,8 @@ let numberSize = 50;
 const ease = "sine.inOut";
 
 function init() {
+  set = gsap.set;
+  
   const [active, ...rest] = order;
   const detailsActive = detailsEven ? "#details-even" : "#details-odd";
   const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
@@ -159,14 +186,12 @@ function init() {
     gsap.to(getCard(i), {
       x: offsetLeft + index * (cardWidth + gap),
       zIndex: 30,
-      delay: 0.05 * index,
       ease,
       delay: startDelay,
     });
     gsap.to(getCardContent(i), {
       x: offsetLeft + index * (cardWidth + gap),
       zIndex: 40,
-      delay: 0.05 * index,
       ease,
       delay: startDelay,
     });
@@ -180,18 +205,27 @@ let clicks = 0;
 
 function step() {
   return new Promise((resolve) => {
-    order.push(order.shift());
+    // Используем безопасный доступ к элементу массива
+    const shifted = order.shift();
+    if (shifted !== undefined) {
+      order.push(shifted);
+    }
+    
     detailsEven = !detailsEven;
 
     const detailsActive = detailsEven ? "#details-even" : "#details-odd";
     const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
 
-    // document.querySelector(`${detailsActive} .place-box .text`).textContent =
-    //   data[order[0]].place;
-    document.querySelector(`${detailsActive} .title-1`).textContent =
-      data[order[0]].title;
-    document.querySelector(`${detailsActive} .title-2`).textContent =
-      data[order[0]].title2;
+    // Добавим проверки на null
+    const title1Element = document.querySelector(`${detailsActive} .title-1`);
+    if (title1Element && order.length > 0) {
+      title1Element.textContent = data[order[0]].title;
+    }
+    
+    const title2Element = document.querySelector(`${detailsActive} .title-2`);
+    if (title2Element && order.length > 0) {
+      title2Element.textContent = data[order[0]].title2;
+    }
 
     gsap.set(detailsActive, { zIndex: 22 });
     gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
@@ -318,13 +352,21 @@ function step() {
 async function loop() {
   await animate(".indicator", 2, { x: 0 });
   await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
-  set(".indicator", { x: -window.innerWidth });
+  
+  // Проверяем, что set инициализирован
+  if (set) {
+    set(".indicator", { x: -window.innerWidth });
+  } else {
+    // Если почему-то set не инициализирован, используем gsap.set напрямую
+    gsap.set(".indicator", { x: -window.innerWidth });
+  }
+  
   await step();
   loop();
 }
 
-async function loadImage(src) {
-  return new Promise((resolve, reject) => {
+async function loadImage(src: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
     let img = new Image();
     img.onload = () => resolve(img);
     img.onerror = reject;
@@ -339,16 +381,35 @@ async function loadImages() {
 
 async function start() {
   try {
+    // Загружаем GSAP перед использованием
+    gsap = await loadGSAP();
+    
+    // После загрузки GSAP инициализируем set
+    set = gsap.set;
+    
     await loadImages();
-    init();
+    
+    // Запускаем инициализацию только после полной загрузки GSAP и изображений
+    if (gsap) {
+      init();
+    } else {
+      console.error("GSAP не был загружен правильно");
+    }
   } catch (error) {
-    console.error("One or more images failed to load", error);
+    console.error("One or more images failed to load or GSAP failed to load", error);
   }
 }
 
-onMounted(() => {
-  _('demo').innerHTML = cards + cardContents;
-  _('slide-numbers').innerHTML = sildeNumbers;
+onMounted(async () => {
+  const demoElement = _('demo');
+  if (demoElement) {
+    demoElement.innerHTML = cards + cardContents;
+  }
+  
+  const slideNumbersElement = _('slide-numbers');
+  if (slideNumbersElement) {
+    slideNumbersElement.innerHTML = sildeNumbers;
+  }
   
   const prevButton = document.querySelector('.arrow-left');
   const nextButton = document.querySelector('.arrow-right');
@@ -367,107 +428,92 @@ onMounted(() => {
     });
   }
   
-  start();
+  await start();
 });
 </script>
 
 <template>
-  <div class="indicator"></div>
+  <div class="root-container">
+    <div class="indicator"></div>
 
-  <nav>
-    <div>
-      <img src="https://snzproject.com/wp-content/uploads/2023/12/snz_logo_-1.png"
-           alt="SNZ"
-           style="height: 100px"
-      />
-    </div>
-    <div>
-      <div class="active">Главная</div>
-      <div>Архитектура</div>
-      <div>Интерьер</div>
-      <div>Ландшафты</div>
-      <div>Контакты</div>
-    </div>
-  </nav>
-
-  <div id="demo"></div>
-
-  <div style="color: black">
-  <div class="details" id="details-even">
-    <div class="place-box">
-      <div class="text"></div>
-    </div>
-    <div class="title-box-1"><div class="title-1">SAINT</div></div>
-    <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
-    <div class="desc">
-    </div>
-<!--    <div class="cta">-->
-<!--      <button class="bookmark">-->
-<!--        <svg-->
-<!--          xmlns="http://www.w3.org/2000/svg"-->
-<!--          viewBox="0 0 24 24"-->
-<!--          fill="currentColor"-->
-<!--        >-->
-<!--          <path-->
-<!--            fill-rule="evenodd"-->
-<!--            d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"-->
-<!--            clip-rule="evenodd"-->
-<!--          />-->
-<!--        </svg>-->
-<!--      </button>-->
-<!--      <button class="discover">Discover Location</button>-->
-<!--    </div>-->
-  </div>
-
-  <div class="details" id="details-odd">
-    <div class="place-box">
-<!--      <div class="text">Switzerland Alps</div>-->
-    </div>
-    <div class="title-box-1"><div class="title-1">SAINT </div></div>
-    <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
-    <div class="desc">
-    </div>
-  </div>
-
-  <div class="pagination" id="pagination">
-    <div class="arrow arrow-left" style="display: none">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M15.75 19.5L8.25 12l7.5-7.5"
+    <nav>
+      <div>
+        <img src="https://snzproject.com/wp-content/uploads/2023/12/snz_logo_-1.png"
+             alt="SNZ"
+             style="height: 100px"
         />
-      </svg>
-    </div>
-    <div class="arrow arrow-right" style="display: none">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M8.25 4.5l7.5 7.5-7.5 7.5"
-        />
-      </svg>
-    </div>
-    <div class="progress-sub-container" >
-      <div class="progress-sub-background" >
-          <div class="progress-sub-foreground" ></div>
+      </div>
+      <div>
+        <div class="active">Главная</div>
+        <div>Архитектура</div>
+        <div>Интерьер</div>
+        <div>Ландшафты</div>
+        <div>Контакты</div>
+      </div>
+    </nav>
+
+    <div id="demo"></div>
+
+    <div style="color: black">
+    <div class="details" id="details-even">
+      <div class="place-box">
+        <div class="text"></div>
+      </div>
+      <div class="title-box-1"><div class="title-1">SAINT</div></div>
+      <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
+      <div class="desc">
       </div>
     </div>
-    <div class="slide-numbers" id="slide-numbers"></div>
-  </div>
-  </div>
 
-  <div class="cover" ></div>
+    <div class="details" id="details-odd">
+      <div class="place-box">
+      </div>
+      <div class="title-box-1"><div class="title-1">SAINT </div></div>
+      <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
+      <div class="desc">
+      </div>
+    </div>
+
+    <div class="pagination" id="pagination">
+      <div class="arrow arrow-left" style="display: none">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5L8.25 12l7.5-7.5"
+          />
+        </svg>
+      </div>
+      <div class="arrow arrow-right" style="display: none">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M8.25 4.5l7.5 7.5-7.5 7.5"
+          />
+        </svg>
+      </div>
+      <div class="progress-sub-container" >
+        <div class="progress-sub-background" >
+            <div class="progress-sub-foreground" ></div>
+        </div>
+      </div>
+      <div class="slide-numbers" id="slide-numbers"></div>
+    </div>
+    </div>
+
+    <div class="cover" ></div>
+  </div>
 </template>
 
 <style>

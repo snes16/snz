@@ -7,7 +7,7 @@
           :key="index"
           class="nav-item"
           @mouseenter="handleHover(index)"
-          @mouseleave="handleLeave(index)"
+          @mouseleave="handleLeave()"
         >
           <router-link 
             :to="link.path" 

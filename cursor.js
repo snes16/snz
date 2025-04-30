@@ -1,6 +1,6 @@
 console.log('Cursor script started loading...');
 
-const canvas = document.querySelector("canvas");
+const canvas = document.getElementById('canvas');
 if (!canvas) {
     console.error('Canvas element not found!');
 } else {
@@ -24,7 +24,7 @@ const pointer = {
 
 const params = {
     pointsNumber: 40,
-    widthFactor: .3,
+    widthFactor: .15,
     mouseThreshold: .6,
     spring: .4,
     friction: .5
@@ -59,12 +59,16 @@ function updateMousePosition(eX, eY) {
     pointer.y = eY;
 }
 
+function setupCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
 setupCanvas();
 update(0);
 window.addEventListener("resize", setupCanvas);
 
 function update(t) {
-    // для вводной анимации
     if (!mouseMoved) {
         pointer.x = (.5 + .3 * Math.cos(.002 * t) * (Math.sin(.005 * t))) * window.innerWidth;
         pointer.y = (.5 + .2 * (Math.cos(.005 * t)) + .1 * Math.cos(.01 * t)) * window.innerHeight;
@@ -91,18 +95,13 @@ function update(t) {
         const yc = .5 * (trail[i].y + trail[i + 1].y);
         ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
         ctx.lineWidth = params.widthFactor * (params.pointsNumber - i);
-        ctx.strokeStyle = `rgba(255, 105, 180, ${1 - i/params.pointsNumber})`; // Розовый цвет с прозрачностью
+        ctx.strokeStyle = `rgba(0, 0, 0, ${1 - i/params.pointsNumber})`;
         ctx.stroke();
     }
     ctx.lineTo(trail[trail.length - 1].x, trail[trail.length - 1].y);
     ctx.stroke();
     
     window.requestAnimationFrame(update);
-}
-
-function setupCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 }
 
 console.log('Cursor script finished loading'); 

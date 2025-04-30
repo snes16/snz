@@ -11,4 +11,9 @@ canvas {
     left: 0;
     z-index: 9999;
     pointer-events: none;
+}
+
+canvas:not(#canvas) {
+    opacity: 0;
+    visibility: hidden;
 } 

@@ -1,51 +1,780 @@
 <script setup lang="ts">
-import Header from './components/Header.vue'
+import { ref, onMounted } from 'vue';
+import gsap from 'gsap';
+
+const data = [
+  {
+    place: 'Switzerland Alps',
+    title: 'Название',
+    title2: '',
+    description: 'Tucked away in the Switzerland Alps, Saint Antönien offers an idyllic retreat for those seeking tranquility and adventure alike. It\'s a hidden gem for backcountry skiing in winter and boasts lush trails for hiking and mountain biking during the warmer months.',
+    image: 'https://snzproject.com/wp-content/uploads/2025/04/banner1.png'
+  },
+  {
+    place: '',
+    title: 'Название',
+    title2: '',
+    description: 'Nagano Prefecture, set within the majestic Japan Alps, is a cultural treasure trove with its historic shrines and temples, particularly the famous Zenkō-ji. The region is also a hotspot for skiing and snowboarding, offering some of the country\'s best powder.',
+    image: 'https://snzproject.com/wp-content/uploads/2023/12/group-881.png'
+  },
+  {
+    place: '',
+    title: 'Название',
+    title2: '',
+    description: 'The journey from the vibrant souks and palaces of Marrakech to the tranquil, starlit sands of Merzouga showcases the diverse splendor of Morocco. Camel treks and desert camps offer an unforgettable immersion into the nomadic way of life.',
+    image: 'https://snzproject.com/wp-content/uploads/2023/12/bg4.png'
+  },
+  {
+    place: '',
+    title: 'Название',
+    title2: '',
+    description: 'Yosemite National Park is a showcase of the American wilderness, revered for its towering granite monoliths, ancient giant sequoias, and thundering waterfalls. The park offers year-round recreational activities, from rock climbing to serene valley walks.',
+    image: 'https://snzproject.com/wp-content/uploads/2023/12/bg3.png'
+  },
+  {
+    place: 'Название',
+    title: 'Название',
+    title2: '',
+    description: 'Los Lances Beach in Tarifa is a coastal paradise known for its consistent winds, making it a world-renowned spot for kitesurfing and windsurfing. The beach\'s long, sandy shores provide ample space for relaxation and sunbathing, with a vibrant atmosphere of beach bars and cafes.',
+    image: 'https://snzproject.com/wp-content/uploads/2023/12/bg2.png'
+  },
+];
+
+const _ = (id) => document.getElementById(id);
+const cards = data.map((i, index) => `<div class="card" id="card${index}" style="background-image:url(${i.image})"></div>`).join('');
+
+const cardContents = data.map((i, index) => `<div class="card-content" id="card-content-${index}">
+<div class="content-start"></div>
+<div class="content-title-1">${i.title}</div>
+<div class="content-title-2">${i.title2}</div>
+</div>`).join('');
+
+const sildeNumbers = data.map((_, index) => `<div class="item" id="slide-item-${index}">${index+1}</div>`).join('');
+
+const range = (n) =>
+  Array(n)
+    .fill(0)
+    .map((i, j) => i + j);
+const set = gsap.set;
+
+function getCard(index) {
+  return `#card${index}`;
+}
+function getCardContent(index) {
+  return `#card-content-${index}`;
+}
+function getSliderItem(index) {
+  return `#slide-item-${index}`;
+}
+
+function animate(target, duration, properties) {
+  return new Promise((resolve) => {
+    gsap.to(target, {
+      ...properties,
+      duration: duration,
+      onComplete: resolve,
+    });
+  });
+}
+
+let order = [0, 1, 2, 3, 4];
+let detailsEven = true;
+
+let offsetTop = 200;
+let offsetLeft = 700;
+let cardWidth = 200;
+let cardHeight = 300;
+let gap = 40;
+let numberSize = 50;
+const ease = "sine.inOut";
+
+function init() {
+  const [active, ...rest] = order;
+  const detailsActive = detailsEven ? "#details-even" : "#details-odd";
+  const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
+  const { innerHeight: height, innerWidth: width } = window;
+  offsetTop = height - 430;
+  offsetLeft = width - 830;
+
+  gsap.set("#pagination", {
+    top: offsetTop + 330,
+    left: offsetLeft,
+    y: 200,
+    opacity: 0,
+    zIndex: 60,
+  });
+  gsap.set("nav", { y: -200, opacity: 0 });
+
+  gsap.set(getCard(active), {
+    x: 0,
+    y: 0,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  gsap.set(getCardContent(active), { x: 0, y: 0, opacity: 0 });
+  gsap.set(detailsActive, { opacity: 0, zIndex: 22, x: -200 });
+  gsap.set(detailsInactive, { opacity: 0, zIndex: 12 });
+  gsap.set(`${detailsInactive} .text`, { y: 100 });
+  gsap.set(`${detailsInactive} .title-1`, { y: 100 });
+  gsap.set(`${detailsInactive} .title-2`, { y: 100 });
+  gsap.set(`${detailsInactive} .desc`, { y: 50 });
+  gsap.set(`${detailsInactive} .cta`, { y: 60 });
+
+  gsap.set(".progress-sub-foreground", {
+    width: 500 * (1 / order.length) * (active + 1),
+  });
+
+  rest.forEach((i, index) => {
+    gsap.set(getCard(i), {
+      x: offsetLeft + 400 + index * (cardWidth + gap),
+      y: offsetTop,
+      width: cardWidth,
+      height: cardHeight,
+      zIndex: 30,
+      borderRadius: 10,
+    });
+    gsap.set(getCardContent(i), {
+      x: offsetLeft + 400 + index * (cardWidth + gap),
+      zIndex: 40,
+      y: offsetTop + cardHeight - 100,
+    });
+    gsap.set(getSliderItem(i), { x: (index + 1) * numberSize });
+  });
+
+  gsap.set(".indicator", { x: -window.innerWidth });
+
+  const startDelay = 0.6;
+
+  gsap.to(".cover", {
+    x: width + 400,
+    delay: 0.5,
+    ease,
+    onComplete: () => {
+      setTimeout(() => {
+        loop();
+      }, 500);
+    },
+  });
+  rest.forEach((i, index) => {
+    gsap.to(getCard(i), {
+      x: offsetLeft + index * (cardWidth + gap),
+      zIndex: 30,
+      delay: 0.05 * index,
+      ease,
+      delay: startDelay,
+    });
+    gsap.to(getCardContent(i), {
+      x: offsetLeft + index * (cardWidth + gap),
+      zIndex: 40,
+      delay: 0.05 * index,
+      ease,
+      delay: startDelay,
+    });
+  });
+  gsap.to("#pagination", { y: 0, opacity: 1, ease, delay: startDelay });
+  gsap.to("nav", { y: 0, opacity: 1, ease, delay: startDelay });
+  gsap.to(detailsActive, { opacity: 1, x: 0, ease, delay: startDelay });
+}
+
+let clicks = 0;
+
+function step() {
+  return new Promise((resolve) => {
+    order.push(order.shift());
+    detailsEven = !detailsEven;
+
+    const detailsActive = detailsEven ? "#details-even" : "#details-odd";
+    const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
+
+    // document.querySelector(`${detailsActive} .place-box .text`).textContent =
+    //   data[order[0]].place;
+    document.querySelector(`${detailsActive} .title-1`).textContent =
+      data[order[0]].title;
+    document.querySelector(`${detailsActive} .title-2`).textContent =
+      data[order[0]].title2;
+
+    gsap.set(detailsActive, { zIndex: 22 });
+    gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
+    gsap.to(`${detailsActive} .text`, {
+      y: 0,
+      delay: 0.1,
+      duration: 0.7,
+      ease,
+    });
+    gsap.to(`${detailsActive} .title-1`, {
+      y: 0,
+      delay: 0.15,
+      duration: 0.7,
+      ease,
+    });
+    gsap.to(`${detailsActive} .title-2`, {
+      y: 0,
+      delay: 0.15,
+      duration: 0.7,
+      ease,
+    });
+    gsap.to(`${detailsActive} .desc`, {
+      y: 0,
+      delay: 0.3,
+      duration: 0.4,
+      ease,
+    });
+    gsap.to(`${detailsActive} .cta`, {
+      y: 0,
+      delay: 0.35,
+      duration: 0.4,
+      onComplete: resolve,
+      ease,
+    });
+    gsap.set(detailsInactive, { zIndex: 12 });
+
+    const [active, ...rest] = order;
+    const prv = rest[rest.length - 1];
+
+    gsap.set(getCard(prv), { zIndex: 10 });
+    gsap.set(getCard(active), { zIndex: 20 });
+    gsap.to(getCard(prv), { scale: 1.5, ease });
+
+    gsap.to(getCardContent(active), {
+      y: offsetTop + cardHeight - 10,
+      opacity: 0,
+      duration: 0.3,
+      ease,
+    });
+    gsap.to(getSliderItem(active), { x: 0, ease });
+    gsap.to(getSliderItem(prv), { x: -numberSize, ease });
+    gsap.to(".progress-sub-foreground", {
+      width: 500 * (1 / order.length) * (active + 1),
+      ease,
+    });
+
+    gsap.to(getCard(active), {
+      x: 0,
+      y: 0,
+      ease,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      borderRadius: 0,
+      onComplete: () => {
+        const xNew = offsetLeft + (rest.length - 1) * (cardWidth + gap);
+        gsap.set(getCard(prv), {
+          x: xNew,
+          y: offsetTop,
+          width: cardWidth,
+          height: cardHeight,
+          zIndex: 30,
+          borderRadius: 10,
+          scale: 1,
+        });
+
+        gsap.set(getCardContent(prv), {
+          x: xNew,
+          y: offsetTop + cardHeight - 100,
+          opacity: 1,
+          zIndex: 40,
+        });
+        gsap.set(getSliderItem(prv), { x: rest.length * numberSize });
+
+        gsap.set(detailsInactive, { opacity: 0 });
+        gsap.set(`${detailsInactive} .text`, { y: 100 });
+        gsap.set(`${detailsInactive} .title-1`, { y: 100 });
+        gsap.set(`${detailsInactive} .title-2`, { y: 100 });
+        gsap.set(`${detailsInactive} .desc`, { y: 50 });
+        gsap.set(`${detailsInactive} .cta`, { y: 60 });
+        clicks -= 1;
+        if (clicks > 0) {
+          step();
+        }
+      },
+    });
+
+    rest.forEach((i, index) => {
+      if (i !== prv) {
+        const xNew = offsetLeft + index * (cardWidth + gap);
+        gsap.set(getCard(i), { zIndex: 30 });
+        gsap.to(getCard(i), {
+          x: xNew,
+          y: offsetTop,
+          width: cardWidth,
+          height: cardHeight,
+          ease,
+          delay: 0.1 * (index + 1),
+        });
+
+        gsap.to(getCardContent(i), {
+          x: xNew,
+          y: offsetTop + cardHeight - 100,
+          opacity: 1,
+          zIndex: 40,
+          ease,
+          delay: 0.1 * (index + 1),
+        });
+        gsap.to(getSliderItem(i), { x: (index + 1) * numberSize, ease });
+      }
+    });
+  });
+}
+
+async function loop() {
+  await animate(".indicator", 2, { x: 0 });
+  await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
+  set(".indicator", { x: -window.innerWidth });
+  await step();
+  loop();
+}
+
+async function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    let img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+async function loadImages() {
+  const promises = data.map(({ image }) => loadImage(image));
+  return Promise.all(promises);
+}
+
+async function start() {
+  try {
+    await loadImages();
+    init();
+  } catch (error) {
+    console.error("One or more images failed to load", error);
+  }
+}
+
+onMounted(() => {
+  _('demo').innerHTML = cards + cardContents;
+  _('slide-numbers').innerHTML = sildeNumbers;
+  
+  const prevButton = document.querySelector('.arrow-left');
+  const nextButton = document.querySelector('.arrow-right');
+
+  if (prevButton) {
+    prevButton.addEventListener('click', () => {
+      clicks = 1;
+      step();
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener('click', () => {
+      clicks = 1;
+      step();
+    });
+  }
+  
+  start();
+});
 </script>
 
 <template>
-  <div class="app">
-    <Header />
-    <main class="main-content">
-      <router-view />
-    </main>
+  <div class="indicator"></div>
+
+  <nav>
+    <div>
+      <img src="https://snzproject.com/wp-content/uploads/2023/12/snz_logo_-1.png"
+           alt="SNZ"
+           style="height: 100px"
+      />
+    </div>
+    <div>
+      <div class="active">Главная</div>
+      <div>Архитектура</div>
+      <div>Интерьер</div>
+      <div>Ландшафты</div>
+      <div>Контакты</div>
+    </div>
+  </nav>
+
+  <div id="demo"></div>
+
+  <div style="color: black">
+  <div class="details" id="details-even">
+    <div class="place-box">
+      <div class="text"></div>
+    </div>
+    <div class="title-box-1"><div class="title-1">SAINT</div></div>
+    <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
+    <div class="desc">
+    </div>
+<!--    <div class="cta">-->
+<!--      <button class="bookmark">-->
+<!--        <svg-->
+<!--          xmlns="http://www.w3.org/2000/svg"-->
+<!--          viewBox="0 0 24 24"-->
+<!--          fill="currentColor"-->
+<!--        >-->
+<!--          <path-->
+<!--            fill-rule="evenodd"-->
+<!--            d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"-->
+<!--            clip-rule="evenodd"-->
+<!--          />-->
+<!--        </svg>-->
+<!--      </button>-->
+<!--      <button class="discover">Discover Location</button>-->
+<!--    </div>-->
   </div>
+
+  <div class="details" id="details-odd">
+    <div class="place-box">
+<!--      <div class="text">Switzerland Alps</div>-->
+    </div>
+    <div class="title-box-1"><div class="title-1">SAINT </div></div>
+    <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
+    <div class="desc">
+    </div>
+  </div>
+
+  <div class="pagination" id="pagination">
+    <div class="arrow arrow-left" style="display: none">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 19.5L8.25 12l7.5-7.5"
+        />
+      </svg>
+    </div>
+    <div class="arrow arrow-right" style="display: none">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8.25 4.5l7.5 7.5-7.5 7.5"
+        />
+      </svg>
+    </div>
+    <div class="progress-sub-container" >
+      <div class="progress-sub-background" >
+          <div class="progress-sub-foreground" ></div>
+      </div>
+    </div>
+    <div class="slide-numbers" id="slide-numbers"></div>
+  </div>
+  </div>
+
+  <div class="cover" ></div>
 </template>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500&display=swap");
+
+:root {
+  --primary-color: #ecad29;
+  --text-color: #FFFFFFDD;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
 body {
-  font-family: 'Century Gothic', sans-serif;
-  background-color: #f8fafc;
-  color: #1a1a1a;
-  overflow-y: auto;
-  padding-top: 80px;
+  margin: 0;
+  background-color: #1a1a1a;
+  color: var(--text-color);
   position: relative;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+}
+
+.card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 6px 6px 10px 2px rgba(0, 0, 0, 0.6);
+}
+
+#btn {
+  position: absolute;
+  top: 690px;
+  left: 16px;
+  z-index: 99;
+}
+
+.card-content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--text-color);
+  padding-left: 16px;
+}
+
+.content-place {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.content-place {
+  font-weight: 500;
+}
+
+.content-title-1,
+.content-title-2 {
+  font-weight: 600;
+  font-size: 20px;
+  font-family: "Oswald", sans-serif;
+}
+
+.content-start {
+  width: 30px;
+  height: 5px;
+  border-radius: 99px;
+  background-color: var(--text-color);
+  margin-bottom: 8px;
+}
+
+.details {
+  z-index: 22;
+  position: absolute;
+  top: 240px;
+  left: 60px;
+}
+
+.place-box {
+  height: 46px;
+  overflow: hidden;
+}
+
+.place-box .text {
+  padding-top: 16px;
+  font-size: 20px;
+  position: relative;
+}
+
+.place-box .text:before {
+  top: 0;
+  left: 0;
+  position: absolute;
+  content: "";
+  width: 30px;
+  height: 4px;
+  border-radius: 99px;
+  background-color: white;
+}
+
+.title-1,
+.title-2 {
+  font-weight: 600;
+  font-size: 72px;
+  font-family: "Oswald", sans-serif;
+  line-height: 1.1;
+}
+
+.title-box-1,
+.title-box-2 {
+  margin-top: 2px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.desc {
+  margin-top: 16px;
+  width: 500px;
+  font-size: 16px;
   line-height: 1.6;
+  opacity: 0.8;
 }
 
-.app {
-  min-height: 100vh;
+.cta {
+  width: 500px;
+  margin-top: 24px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+}
+
+.bookmark {
+  border: none;
+  background-color: var(--primary-color);
+  width: 36px;
+  height: 36px;
+  border-radius: 99px;
+  color: white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.bookmark svg {
+  width: 20px;
+  height: 20px;
+}
+
+.discover {
+  border: 1px solid #ffffff;
+  background-color: transparent;
+  height: 36px;
+  border-radius: 99px;
+  color: #ffffff;
+  padding: 4px 24px;
+  font-size: 12px;
+  margin-left: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 36px;
+  font-weight: 500;
+}
+
+nav svg {
+  width: 20px;
+  height: 20px;
+}
+
+.svg-container {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+nav > div {
+  display: inline-flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+nav > div:first-child {
+  gap: 10px;
+}
+
+nav > div:last-child {
+  gap: 24px;
+}
+
+nav > div:last-child > div {
+  cursor: pointer;
+}
+
+nav > div:last-child > .active {
   position: relative;
 }
 
-.main-content {
-  flex: 1;
-  width: 100%;
+nav > div:last-child > .active:after {
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  content: "";
+  height: 3px;
+  border-radius: 99px;
+  background-color: var(--primary-color);
+}
+
+.indicator {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 5px;
+  z-index: 60;
+  background-color: var(--primary-color);
+}
+
+.pagination {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  display: inline-flex;
+}
+
+.arrow {
+  z-index: 60;
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  border: 2px solid #ffffff55;
+  display: grid;
+  place-items: center;
+}
+
+.arrow:nth-child(2) {
+  margin-left: 20px;
+}
+
+.arrow svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
+  color: #ffffff99;
+}
+
+.progress-sub-container {
+  margin-left: 24px;
+  z-index: 60;
+  width: 500px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.progress-sub-background {
+  width: 500px;
+  height: 3px;
+  background-color: #ffffff33;
+}
+
+.progress-sub-foreground {
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.slide-numbers {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  z-index: 60;
   position: relative;
-  z-index: 1;
-  background-color: #ffffff;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.03);
+}
+
+.slide-numbers .item {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  color: white;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.cover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
+  z-index: 100;
 }
 </style>

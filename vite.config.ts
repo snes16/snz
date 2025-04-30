@@ -4,13 +4,4 @@ import vue from '@vitejs/plugin-vue'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  publicDir: 'public',
-  build: {
-    assetsDir: 'assets',
-    rollupOptions: {
-      output: {
-        assetFileNames: 'assets/[name][extname]'
-      }
-    }
-  }
 })

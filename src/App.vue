@@ -483,11 +483,12 @@ onMounted(async () => {
 </template>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Century+Gothic&display=swap");
 
 :root {
   --primary-color: #ecad29;
   --text-color: #FFFFFFDD;
+  --main-font: "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
 }
 
 * {
@@ -502,7 +503,7 @@ body {
   color: var(--text-color);
   position: relative;
   overflow: hidden;
-  font-family: "Inter", sans-serif;
+  font-family: var(--main-font);
 }
 
 .app-container {
@@ -549,7 +550,7 @@ body {
 .content-title-2 {
   font-weight: 600;
   font-size: 20px;
-  font-family: "Oswald", sans-serif;
+  font-family: var(--main-font);
 }
 
 .content-start {
@@ -593,7 +594,7 @@ body {
 .title-2 {
   font-weight: 600;
   font-size: 72px;
-  font-family: "Oswald", sans-serif;
+  font-family: var(--main-font);
   line-height: 1.1;
 }
 

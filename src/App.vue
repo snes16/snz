@@ -483,7 +483,7 @@ onMounted(async () => {
 </template>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Century+Gothic&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400;500;600;700&display=swap");
 
 :root {
   --primary-color: #ecad29;
@@ -504,6 +504,7 @@ body {
   position: relative;
   overflow: hidden;
   font-family: var(--main-font);
+  font-weight: 500;
 }
 
 .app-container {
@@ -539,16 +540,16 @@ body {
 .content-place {
   margin-top: 6px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .content-place {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .content-title-1,
 .content-title-2 {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 20px;
   font-family: var(--main-font);
 }
@@ -592,7 +593,7 @@ body {
 
 .title-1,
 .title-2 {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 72px;
   font-family: var(--main-font);
   line-height: 1.1;
@@ -611,6 +612,7 @@ body {
   font-size: 16px;
   line-height: 1.6;
   opacity: 0.8;
+  font-weight: 500;
 }
 
 .cta {
@@ -660,7 +662,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 30px 50px;
-  font-weight: 500;
+  font-weight: 600;
   background-color: rgba(26, 26, 26, 0.8);
   backdrop-filter: blur(5px);
 }
@@ -700,8 +702,8 @@ nav > div:first-child {
   cursor: pointer;
   transition: color 0.3s ease, opacity 0.3s ease;
   padding-bottom: 4px;
-  font-size: 1.8rem;
   font-weight: 600;
+  font-size: 1.8rem;
 }
 
 .nav-link:hover {

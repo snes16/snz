@@ -258,9 +258,10 @@ onMounted(() => {
 }
 
 .project-description {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   line-height: 1.6;
   color: #444;
+  font-weight: 500;
 }
 
 /* Медиа запросы для адаптивности */

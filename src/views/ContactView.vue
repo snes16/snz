@@ -386,13 +386,13 @@ function initMap() {
   color: #333333;
   margin-bottom: 3rem;
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .section-title {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #333333;
   border-bottom: 2px solid #eeeeee;
   padding-bottom: 0.5rem;
@@ -414,12 +414,14 @@ function initMap() {
 .contact-details {
   font-family: 'Century Gothic', sans-serif;
   line-height: 1.8;
+  font-weight: 500;
 }
 
 .address, .phone, .email, .instagram {
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
   color: #555555;
+  font-weight: 500;
 }
 
 .social-media {
@@ -447,7 +449,7 @@ function initMap() {
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   font-family: 'Century Gothic', sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 2rem;
 }
 
@@ -496,7 +498,7 @@ function initMap() {
   margin: 0;
   font-family: 'Century Gothic', sans-serif;
   font-size: 1.3rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .close-button {
@@ -520,7 +522,7 @@ function initMap() {
   display: block;
   margin-bottom: 0.5rem;
   color: #333333;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .form-group input[type="text"],
@@ -548,6 +550,7 @@ function initMap() {
   margin: 0;
   font-size: 0.9rem;
   color: #555555;
+  font-weight: 500;
 }
 
 .submit-button {
@@ -560,7 +563,7 @@ function initMap() {
   cursor: pointer;
   transition: background-color 0.3s;
   font-family: 'Century Gothic', sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   width: 100%;
   margin-top: 1rem;
 }

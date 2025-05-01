@@ -513,7 +513,6 @@ onMounted(async () => {
 .content-title-2 {
   font-weight: 600;
   font-size: 20px;
-  font-family: "Oswald", sans-serif;
 }
 
 .content-start {
@@ -557,7 +556,6 @@ onMounted(async () => {
 .title-2 {
   font-weight: 600;
   font-size: 72px;
-  font-family: "Oswald", sans-serif;
   line-height: 1.1;
 }
 

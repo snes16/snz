@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import gsap from 'gsap';
 
 let data = [
@@ -326,6 +326,8 @@ function step() {
 }
 
 async function loop() {
+  if (!isHomePage.value) return;
+  
   await animate(".indicator", 2, { x: 0 });
   await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
   
@@ -368,6 +370,10 @@ async function start() {
 }
 
 const router = useRouter();
+const route = useRoute();
+
+// Check if we're on the home page
+const isHomePage = computed(() => route.name === 'home');
 
 onMounted(async () => {
   const demoElement = _('demo');
@@ -449,30 +455,31 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="app-container">
-    <div class="indicator"></div>
-    
-    <nav>
-      <div>
-        <a href="/" class="logo-link">
-          <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
-              alt="SNZ"
-              style="height: 120px"
-          />
-        </a>
-      </div>
-      <div class="nav-links">
-        <a href="/" class="nav-link active">Главная</a>
-        <a href="/architecture" class="nav-link">Архитектура</a>
-        <a href="/interior" class="nav-link">Интерьер</a>
-        <a href="/landscape" class="nav-link">Ландшафты</a>
-        <a href="/contacts" class="nav-link">Контакты</a>
-      </div>
-    </nav>
-    
-    <!-- Здесь будет отображаться содержимое маршрутов -->
-    <router-view />
-  </div>
+<div class="app-container">
+  <!-- Only render the indicator on the home page -->
+  <div v-if="isHomePage" class="indicator"></div>
+  
+  <nav>
+    <div>
+      <a href="/" class="logo-link">
+        <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
+            alt="SNZ"
+            style="height: 120px"
+        />
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="/" class="nav-link active">Главная</a>
+      <a href="/architecture" class="nav-link">Архитектура</a>
+      <a href="/interior" class="nav-link">Интерьер</a>
+      <a href="/landscape" class="nav-link">Ландшафты</a>
+      <a href="/contacts" class="nav-link">Контакты</a>
+    </div>
+  </nav>
+  
+  <!-- Здесь будет отображаться содержимое маршрутов -->
+  <router-view />
+</div>
 </template>
 
 <style>

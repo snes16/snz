@@ -197,7 +197,7 @@ onMounted(() => {
   max-height: 1030px;
   margin-left: auto;
   width: 50%;
-  margin-top: -20px;
+  margin-top: -17px;
 }
 
 .project-card {

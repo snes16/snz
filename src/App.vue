@@ -455,7 +455,7 @@ onMounted(async () => {
     <nav>
       <div>
         <a href="/" class="logo-link">
-          <img src="https://snzproject.com/wp-content/uploads/2023/12/snz_logo_-1.png"
+          <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
               alt="SNZ"
               style="height: 120px"
           />

@@ -205,7 +205,7 @@ onMounted(() => {
   max-height: 1030px;
   margin-left: auto; /* Ширина сайдбара */
   width: 50%;
-  margin-top: -20px;
+  margin-top: -17px;
 }
 
 .project-card {

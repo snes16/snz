@@ -1,155 +1,289 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import ProjectCard from '../components/ProjectCard.vue'
+import { ref, onMounted } from 'vue';
 
-// Mock data for interior projects - will be replaced with API data later
+// Данные о проектах в разделе Интерьер
 const projects = ref([
   {
-    id: 1,
-    title: 'Минималистичная квартира',
-    image: 'https://placehold.co/1200x800?text=Интерьер+1',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+    id: 'apartment-133',
+    title: 'Квартира 133м2',
+    image: 'https://placehold.co/800x600?text=Квартира+133м2',
+    description: 'Просторная квартира в современном стиле с функциональной планировкой и продуманным зонированием пространства.',
+    year: '2022',
+    location: 'г. Москва'
   },
   {
-    id: 2,
-    title: 'Загородный дом',
-    image: 'https://placehold.co/1200x800?text=Интерьер+2',
-    description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    id: 'podium',
+    title: 'Проект Роdium',
+    image: 'https://placehold.co/800x600?text=Проект+Роdium',
+    description: 'Интерьер бутика, сочетающий в себе элегантность и функциональность. Особое внимание уделено эффектному освещению и акцентным деталям.',
+    year: '2021',
+    location: 'г. Санкт-Петербург'
   },
   {
-    id: 3,
-    title: 'Офисное пространство',
-    image: 'https://placehold.co/1200x800?text=Интерьер+3',
-    description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+    id: 'apartment-95',
+    title: 'Квартира 95м2',
+    image: 'https://placehold.co/800x600?text=Квартира+95м2',
+    description: 'Уютный современный интерьер с элементами скандинавского стиля. Светлые тона, натуральные материалы и продуманная эргономика.',
+    year: '2021',
+    location: 'г. Алматы, Казахстан'
+  },
+  {
+    id: 'aneli',
+    title: 'Салон красоты Aneli',
+    image: 'https://placehold.co/800x600?text=Салон+красоты+Aneli',
+    description: 'Элегантный интерьер салона красоты, где комфорт клиентов стоит на первом месте. Изысканный дизайн в сочетании с практичными решениями.',
+    year: '2020',
+    location: 'г. Краснодар'
+  },
+  {
+    id: 'apartment-100',
+    title: 'Квартира 100м2',
+    image: 'https://placehold.co/800x600?text=Квартира+100м2',
+    description: 'Современный интерьер с элементами минимализма. Сдержанная цветовая гамма, качественные материалы и нестандартные планировочные решения.',
+    year: '2019',
+    location: 'г. Москва'
   }
 ]);
+
+// Активный проект для подсветки в меню
+const activeProject = ref<string | null>(null);
+
+// Функция для скролла к нужному проекту
+const scrollToProject = (projectId: string) => {
+  const element = document.getElementById(projectId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+// Обработчик скролла для отслеживания видимых проектов
+const handleScroll = () => {
+  const projectElements = projects.value.map(project => ({
+    id: project.id,
+    element: document.getElementById(project.id)
+  }));
+  
+  for (const { id, element } of projectElements) {
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      if (rect.top <= 200 && rect.bottom >= 200) {
+        activeProject.value = id;
+        break;
+      }
+    }
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  // Устанавливаем первый проект как активный при загрузке
+  if (projects.value.length > 0) {
+    activeProject.value = projects.value[0].id;
+  }
+});
 </script>
 
 <template>
   <div class="interior-page">
-    <section class="hero">
-      <h1 class="title">Интерьер</h1>
-      <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-    </section>
-
-    <section class="projects">
-      <div class="container">
-        <div class="projects-list">
-          <ProjectCard
-            v-for="(project, index) in projects"
-            :key="index"
-            :image="project.image"
-            :title="project.title"
-            :description="project.description"
-          />
+    <div class="page-container">
+      <!-- Фиксированная левая панель с навигацией по проектам -->
+      <aside class="sidebar">
+        <h1 class="page-title">Интерьер</h1>
+        <nav class="project-nav">
+          <ul>
+            <li v-for="project in projects" :key="project.id">
+              <a 
+                href="javascript:void(0)" 
+                @click="scrollToProject(project.id)"
+                :class="{ active: activeProject === project.id }"
+              >
+                {{ project.title }}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      
+      <!-- Скроллящаяся правая часть с проектами -->
+      <main class="content">
+        <div 
+          v-for="project in projects" 
+          :key="project.id" 
+          :id="project.id" 
+          class="project-card"
+        >
+          <div class="project-image">
+            <img :src="project.image" :alt="project.title">
+          </div>
+          <div class="project-details">
+            <h2 class="project-title">{{ project.title }}</h2>
+            <div class="project-meta">
+              <span class="project-location">{{ project.location }}</span>
+              <span class="project-year">{{ project.year }}</span>
+            </div>
+            <p class="project-description">{{ project.description }}</p>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section class="about">
-      <div class="container">
-        <h2>О нашем подходе</h2>
-        <div class="content">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </div>
-      </div>
-    </section>
+      </main>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .interior-page {
-  width: 100%;
+  background-color: #f8f9fa;
   min-height: 100vh;
+  color: #333;
+  padding-top: 1rem;
+}
+
+.page-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 2rem);
+}
+
+/* Стили для фиксированной боковой панели */
+.sidebar {
+  width: 350px;
+  position: sticky;
+  top: 120px; /* Оставляем место под хедер */
+  height: calc(100vh - 120px);
+  padding: 2rem;
+  border-right: 1px solid #eaeaea;
   overflow-y: auto;
 }
 
-.hero {
-  height: 50vh;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/src/assets/project1.jpg');
-  background-size: cover;
-  background-position: center;
-  color: white;
-  margin-bottom: 4rem;
-}
-
-.title {
-  font-size: 3rem;
-  font-weight: 400;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  font-weight: 300;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.projects-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-  margin-bottom: 4rem;
-  width: 100%;
-}
-
-.about {
-  padding: 4rem 0;
-  background-color: #fafafa;
-}
-
-.about h2 {
-  font-size: 2rem;
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
   margin-bottom: 2rem;
-  text-align: center;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-
-.content {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.content p {
-  font-size: 1rem;
-  line-height: 1.6;
   color: #333;
-  font-weight: 300;
 }
 
-@media (max-width: 768px) {
-  .title {
-    font-size: 2.5rem;
+.project-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-nav a {
+  display: block;
+  padding: 0.8rem 0;
+  text-decoration: none;
+  color: #555;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-nav a:hover, 
+.project-nav a.active {
+  color: #1a1a1a;
+  font-weight: 600;
+  border-left-color: var(--primary-color, #ecad29);
+  background-color: transparent;
+}
+
+/* Стили для скроллящегося контента */
+.content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
+}
+
+.project-card {
+  margin-bottom: 5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.project-card:last-child {
+  border-bottom: none;
+}
+
+.project-image {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.project-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.project-image:hover img {
+  transform: scale(1.01);
+}
+
+.project-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.project-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.project-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* Медиа запросы для адаптивности */
+@media (max-width: 992px) {
+  .page-container {
+    flex-direction: column;
   }
-  
-  .subtitle {
-    font-size: 1.1rem;
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    position: relative;
+    top: 0;
+    border-right: none;
+    border-bottom: 1px solid #eaeaea;
+    overflow-y: visible;
   }
-  
+
   .content {
-    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
   }
-  
-  .hero {
-    height: 40vh;
+
+  .project-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .project-nav a {
+    padding: 0.5rem 1rem;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .project-nav a:hover, 
+  .project-nav a.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--primary-color, #ecad29);
   }
 }
 </style>

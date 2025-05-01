@@ -1,34 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-// Заменяем стандартный импорт на импорт через CDN
-// import gsap from 'gsap';
+import gsap from 'gsap';
 
-// Добавляем объявление типа для window.gsap
-declare global {
-  interface Window {
-    gsap: any;
-  }
-}
-
-// Добавляем CDN скрипт для GSAP
-const loadGSAP = () => {
-  return new Promise((resolve) => {
-    if (window.gsap) {
-      resolve(window.gsap);
-      return;
-    }
-    
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js';
-    script.onload = () => resolve(window.gsap);
-    document.head.appendChild(script);
-  });
-};
-
-let gsap: any;
-
-const data = [
+let data = [
   {
     place: 'Switzerland Alps',
     title: 'Название',
@@ -382,22 +357,13 @@ async function loadImages() {
 
 async function start() {
   try {
-    // Загружаем GSAP перед использованием
-    gsap = await loadGSAP();
-    
-    // После загрузки GSAP инициализируем set
-    set = gsap.set;
-    
+    // Теперь мы можем использовать gsap напрямую, без необходимости загрузки через CDN
     await loadImages();
     
-    // Запускаем инициализацию только после полной загрузки GSAP и изображений
-    if (gsap) {
-      init();
-    } else {
-      console.error("GSAP не был загружен правильно");
-    }
+    // Запускаем инициализацию только после полной загрузки изображений
+    init();
   } catch (error) {
-    console.error("One or more images failed to load or GSAP failed to load", error);
+    console.error("One or more images failed to load", error);
   }
 }
 

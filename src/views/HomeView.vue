@@ -1,29 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-
-// Добавляем объявление типа для window.gsap
-declare global {
-  interface Window {
-    gsap: any;
-  }
-}
-
-// Добавляем CDN скрипт для GSAP
-const loadGSAP = () => {
-  return new Promise((resolve) => {
-    if (window.gsap) {
-      resolve(window.gsap);
-      return;
-    }
-    
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js';
-    script.onload = () => resolve(window.gsap);
-    document.head.appendChild(script);
-  });
-};
-
-let gsap: any;
+import gsap from 'gsap';
 
 const data = [
   {
@@ -381,22 +358,15 @@ async function loadImages() {
 
 async function start() {
   try {
-    // Загружаем GSAP перед использованием
-    gsap = await loadGSAP();
-    
-    // После загрузки GSAP инициализируем set
+    // Инициализируем set
     set = gsap.set;
     
     await loadImages();
     
-    // Запускаем инициализацию только после полной загрузки GSAP и изображений
-    if (gsap) {
-      init();
-    } else {
-      console.error("GSAP не был загружен правильно");
-    }
+    // Запускаем инициализацию после загрузки изображений
+    init();
   } catch (error) {
-    console.error("One or more images failed to load or GSAP failed to load", error);
+    console.error("One or more images failed to load", error);
   }
 }
 

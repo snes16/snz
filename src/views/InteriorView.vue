@@ -62,7 +62,7 @@ const handleScroll = () => {
     id: project.id,
     element: document.getElementById(project.id)
   }));
-  
+
   for (const { id, element } of projectElements) {
     if (element) {
       const rect = element.getBoundingClientRect();
@@ -92,10 +92,10 @@ onMounted(() => {
         <nav class="project-nav">
           <ul>
             <li v-for="project in projects" :key="project.id">
-              <a 
-                href="javascript:void(0)" 
-                @click="scrollToProject(project.id)"
-                :class="{ active: activeProject === project.id }"
+              <a
+                  href="javascript:void(0)"
+                  @click="scrollToProject(project.id)"
+                  :class="{ active: activeProject === project.id }"
               >
                 {{ project.title }}
               </a>
@@ -103,14 +103,14 @@ onMounted(() => {
           </ul>
         </nav>
       </aside>
-      
+
       <!-- Скроллящаяся правая часть с проектами -->
       <main class="content">
-        <div 
-          v-for="project in projects" 
-          :key="project.id" 
-          :id="project.id" 
-          class="project-card"
+        <div
+            v-for="project in projects"
+            :key="project.id"
+            :id="project.id"
+            class="project-card"
         >
           <div class="project-image">
             <img :src="project.image" :alt="project.title">
@@ -135,24 +135,27 @@ onMounted(() => {
   min-height: 100vh;
   color: #333;
   padding-top: 1rem;
+  margin-top: 190px;
 }
 
 .page-container {
   display: flex;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 0 0 0 auto;
   min-height: calc(100vh - 2rem);
 }
 
 /* Стили для фиксированной боковой панели */
 .sidebar {
-  width: 350px;
-  position: sticky;
-  top: 120px; /* Оставляем место под хедер */
+  width: 600px;
+  position: fixed; /* Изменено с sticky на fixed */
+  left: 0;
+  top: 190px; /* Оставляем место под хедер */
   height: calc(100vh - 120px);
   padding: 2rem;
-  border-right: 1px solid #eaeaea;
   overflow-y: auto;
+  background-color: #f8f9fa; /* Добавим фон для лучшей читаемости */
+  z-index: 10; /* Чтобы сайдбар был поверх других элементов */
 }
 
 .page-title {
@@ -160,6 +163,11 @@ onMounted(() => {
   font-weight: 700;
   margin-bottom: 2rem;
   color: #333;
+}
+
+.project-nav {
+  background: none;
+  position: static;
 }
 
 .project-nav ul {
@@ -173,14 +181,14 @@ onMounted(() => {
   padding: 0.8rem 0;
   text-decoration: none;
   color: #555;
-  font-size: 1.1rem;
+  font-size: 1.6rem;
   transition: all 0.3s ease;
   border-left: 3px solid transparent;
   padding-left: 1rem;
   margin-bottom: 0.5rem;
 }
 
-.project-nav a:hover, 
+.project-nav a:hover,
 .project-nav a.active {
   color: #1a1a1a;
   font-weight: 600;
@@ -191,10 +199,13 @@ onMounted(() => {
 /* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
-  padding: 2rem;
+  padding: 2rem 2rem 2rem 400px; /* Добавляем отступ слева равный ширине сайдбара + padding */
   overflow-y: auto;
-  height: calc(100vh - 120px);
-  max-height: calc(100vh - 120px);
+  height: calc(100vh - 20px);
+  max-height: 1030px;
+  margin-left: auto; /* Ширина сайдбара */
+  width: 50%;
+  margin-top: -20px;
 }
 
 .project-card {
@@ -260,12 +271,16 @@ onMounted(() => {
     border-right: none;
     border-bottom: 1px solid #eaeaea;
     overflow-y: visible;
+    padding: 1rem;
+    background-color: transparent;
   }
 
   .content {
     height: auto;
     max-height: none;
     overflow-y: visible;
+    padding: 1rem;
+    margin-left: 0;
   }
 
   .project-nav ul {
@@ -278,9 +293,10 @@ onMounted(() => {
     padding: 0.5rem 1rem;
     border-left: none;
     border-bottom: 3px solid transparent;
+    font-size: 20px;
   }
 
-  .project-nav a:hover, 
+  .project-nav a:hover,
   .project-nav a.active {
     border-left-color: transparent;
     border-bottom-color: var(--primary-color, #ecad29);

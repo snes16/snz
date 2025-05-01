@@ -211,7 +211,7 @@ onMounted(() => {
   height: calc(100vh - 20px);
   max-height: 1030px;
   margin-left: auto; /* Ширина сайдбара */
-  margin-top: 170px;
+  margin-top: -20px;
   width: 50%;
 }
 

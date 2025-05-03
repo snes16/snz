@@ -663,7 +663,7 @@ nav {
   justify-content: space-between;
   padding: 30px 50px;
   font-weight: 600;
-  background-color: rgba(26, 26, 26, 0.8);
+  background-color: #8f9680;
   backdrop-filter: blur(5px);
 }
 

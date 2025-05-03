@@ -142,7 +142,7 @@ onMounted(() => {
   min-height: 100vh;
   color: #333;
   padding-top: 1rem;
-  margin-top: 190px;
+  margin-top: 186px;
 }
 
 .page-container {

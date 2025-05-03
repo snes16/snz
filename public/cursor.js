@@ -30,7 +30,7 @@ const pointer = {
 
 const params = {
     pointsNumber: 40,
-    widthFactor: .15,
+    widthFactor: .05,
     mouseThreshold: .6,
     spring: .4,
     friction: .5

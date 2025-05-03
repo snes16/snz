@@ -2,7 +2,7 @@
   <div class="contact-page">
     <div class="contact-content">
       <h1 class="title">Контакты</h1>
-      
+
       <div class="contact-grid">
         <div class="contact-info">
           <div class="contact-details">
@@ -12,22 +12,27 @@
               БЦ Жел Тау, ул. Егизбаева 7В,<br>
               5 этаж, офис 507/2
             </p>
-            
+
             <p class="phone">Тел: +7 707 113 3055</p>
             <p class="email">E-mail: snzproject@yandex.ru</p>
-            
+
             <div class="social-media">
               <h2 class="section-title">Социальные сети</h2>
               <p class="instagram">Instagram: @snzproject</p>
             </div>
-            
+
             <button class="request-button" @click="openModal">Отправить заявку</button>
           </div>
         </div>
-        
-        <div id="map" class="map-container"></div>
+
+        <div class="map-container">
+          <iframe style="-webkit-filter: grayscale(100%);filter: grayscale(100%);"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d726.7329503418385!2d76.8851965839379!3d43.23188950089807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3883691b0d18784f%3A0x907fa9f6f65fbb34!2z0JbQtdC7INCi0LDRgw!5e0!3m2!1sru!2sua!4v1702118900523!5m2!1sru!2sua"
+                  width="100%" height="500" allowfullscreen="" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
       </div>
-    
+
       <!-- Модальное окно с формой заявки -->
       <div class="modal" v-if="isModalOpen">
         <div class="modal-content">
@@ -63,43 +68,7 @@
 </template>
 
 <script setup>
-/**
- * ContactView.vue - Страница контактов для SNZ Project
- * 
- * DEVELOPER NOTES:
- * ---------------
- * 1. Google Maps API:
- *    - Для работы карты необходимо добавить API ключ Google Maps в строке 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap'
- *    - Получить ключ можно в Google Cloud Console: https://console.cloud.google.com/
- *    - API ключ должен иметь разрешения для Maps JavaScript API
- *    - Для продакшена рекомендуется настроить ограничения по домену и IP
- * 
- * 2. Координаты офиса:
- *    - Текущие координаты: { lat: 43.226, lng: 76.8955 } - примерные координаты БЦ Жел Тау
- *    - Для точного позиционирования необходимо уточнить координаты
- * 
- * 3. Форма обратной связи:
- *    - Текущая реализация только выводит данные в консоль
- *    - Для отправки данных на сервер необходимо реализовать соответствующий API endpoint
- *    - Рекомендуемая структура для отправки: { name, phone, email, agreement }
- * 
- * 4. Стилизация:
- *    - Цветовая схема: белый фон (#ffffff), черный текст (#333333)
- *    - Для мобильных устройств карта отображается первой (order: -1)
- *    - Для корректного отображения на мобильных устройствах используются медиа-запросы
- * 
- * 5. Известные проблемы:
- *    - При первой загрузке карта может отображаться некорректно из-за задержки загрузки API
- *    - Решение: добавить прелоадер или проверку готовности DOM перед инициализацией карты
- * 
- * 6. TODO:
- *    - Добавить валидацию формы (регулярные выражения для телефона и email)
- *    - Реализовать отправку данных на сервер
- *    - Добавить анимацию открытия/закрытия модального окна
- *    - Оптимизировать загрузку Google Maps API (возможно, использовать lazy loading)
- */
-
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
 // Состояние модального окна
 const isModalOpen = ref(false);
@@ -115,22 +84,20 @@ const formData = ref({
 // Открытие модального окна
 const openModal = () => {
   isModalOpen.value = true;
-  document.body.style.overflow = 'hidden'; // Блокируем прокрутку страницы
+  document.body.style.overflow = 'hidden';
 };
 
 // Закрытие модального окна
 const closeModal = () => {
   isModalOpen.value = false;
-  document.body.style.overflow = ''; // Разблокируем прокрутку страницы
+  document.body.style.overflow = '';
 };
 
 // Отправка формы
 const submitForm = () => {
-  // Здесь будет логика отправки формы
   console.log('Форма отправлена:', formData.value);
   alert('Ваша заявка успешно отправлена!');
   closeModal();
-  // Сбрасываем форму
   formData.value = {
     name: '',
     phone: '',
@@ -138,229 +105,6 @@ const submitForm = () => {
     agreement: false
   };
 };
-
-// Инициализация Google Maps
-onMounted(() => {
-  // Проверяем, существует ли уже скрипт Google Maps на странице
-  if (document.getElementById('google-maps-script')) {
-    if (window.google && window.google.maps) {
-      initMap();
-    }
-    return;
-  }
-  
-  // Добавляем скрипт Google Maps
-  const googleMapsScript = document.createElement('script');
-  googleMapsScript.id = 'google-maps-script';
-  googleMapsScript.src = 'https://maps.googleapis.com/maps/api/js?callback=initMap';
-  googleMapsScript.async = true;
-  googleMapsScript.defer = true;
-  
-  // Определяем функцию инициализации карты в глобальной области видимости
-  window.initMap = initMap;
-  
-  // Добавляем скрипт на страницу
-  document.head.appendChild(googleMapsScript);
-});
-
-// Функция инициализации карты
-function initMap() {
-  // Координаты БЦ Жел Тау (уточненные)
-  const officeCoords = { lat: 43.226, lng: 76.8955 };
-  
-  // Создаем карту с настройками
-  const map = new google.maps.Map(document.getElementById('map'), {
-    center: officeCoords,
-    zoom: 16,
-    styles: [
-      {
-        "featureType": "all",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "weight": "2.00"
-          }
-        ]
-      },
-      {
-        "featureType": "all",
-        "elementType": "geometry.stroke",
-        "stylers": [
-          {
-            "color": "#9c9c9c"
-          }
-        ]
-      },
-      {
-        "featureType": "all",
-        "elementType": "labels.text",
-        "stylers": [
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "landscape",
-        "elementType": "all",
-        "stylers": [
-          {
-            "color": "#f2f2f2"
-          }
-        ]
-      },
-      {
-        "featureType": "landscape",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#ffffff"
-          }
-        ]
-      },
-      {
-        "featureType": "landscape.man_made",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#ffffff"
-          }
-        ]
-      },
-      {
-        "featureType": "poi",
-        "elementType": "all",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "all",
-        "stylers": [
-          {
-            "saturation": -100
-          },
-          {
-            "lightness": 45
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#eeeeee"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#7b7b7b"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-          {
-            "color": "#ffffff"
-          }
-        ]
-      },
-      {
-        "featureType": "road.highway",
-        "elementType": "all",
-        "stylers": [
-          {
-            "visibility": "simplified"
-          }
-        ]
-      },
-      {
-        "featureType": "road.arterial",
-        "elementType": "labels.icon",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "transit",
-        "elementType": "all",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "all",
-        "stylers": [
-          {
-            "color": "#46bcec"
-          },
-          {
-            "visibility": "on"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#c8d7d4"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#070707"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-          {
-            "color": "#ffffff"
-          }
-        ]
-      }
-    ]
-  });
-  
-  // Добавляем маркер для офиса
-  const marker = new google.maps.Marker({
-    position: officeCoords,
-    map: map,
-    title: 'БЦ Жел Тау, ул. Егизбаева 7В'
-  });
-  
-  // Добавляем информационное окно
-  const infoWindow = new google.maps.InfoWindow({
-    content: '<div style="padding: 10px; max-width: 200px;"><strong>БЦ Жел Тау</strong><br>ул. Егизбаева 7В, этаж 5, офис 507/2</div>'
-  });
-  
-  // Открываем информационное окно при клике на маркер
-  marker.addListener('click', () => {
-    infoWindow.open(map, marker);
-  });
-}
 </script>
 
 <style scoped>
@@ -368,7 +112,7 @@ function initMap() {
   min-height: 100vh;
   background-color: #ffffff;
   padding: 0;
-  padding-top: 80px; /* Отступ для хедера */
+  padding-top: 80px;
   margin-top: 180px;
   color: #333333;
 }
@@ -377,7 +121,7 @@ function initMap() {
   max-width: 100%;
   margin: 0 auto;
   padding: 2rem 4rem;
-  position: relative; /* Для правильного позиционирования модального окна */
+  position: relative;
 }
 
 .title {
@@ -577,7 +321,7 @@ function initMap() {
     grid-template-columns: 350px 1fr;
     gap: 2rem;
   }
-  
+
   .contact-content {
     padding: 2rem;
   }
@@ -587,22 +331,22 @@ function initMap() {
   .contact-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .title {
     font-size: 2rem;
     margin-bottom: 2rem;
   }
-  
+
   .map-container {
     height: 350px;
-    order: -1; /* Карта будет отображаться первой на мобильных устройствах */
+    order: -1;
     margin-bottom: 2rem;
   }
-  
+
   .modal-content {
     width: 95%;
   }
-  
+
   .contact-content {
     padding: 1.5rem;
   }

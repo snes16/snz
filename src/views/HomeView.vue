@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import gsap from 'gsap';
 
 const data = [
@@ -40,46 +41,11 @@ const data = [
   },
 ];
 
-const _ = (id: string): HTMLElement | null => document.getElementById(id);
-const cards = data.map((i, index: number) => `<div class="card" id="card${index}" style="background-image:url(${i.image})"></div>`).join('');
-
-const cardContents = data.map((i, index: number) => `<div class="card-content" id="card-content-${index}">
-<div class="content-start"></div>
-<div class="content-title-1">${i.title}</div>
-<div class="content-title-2">${i.title2}</div>
-</div>`).join('');
-
-const sildeNumbers = data.map((_, index: number) => `<div class="item" id="slide-item-${index}">${index+1}</div>`).join('');
-
-const range = (n: number) =>
-  Array(n)
-    .fill(0)
-    .map((i, j) => i + j);
-
-function getCard(index: number): string {
-  return `#card${index}`;
-}
-function getCardContent(index: number): string {
-  return `#card-content-${index}`;
-}
-function getSliderItem(index: number): string {
-  return `#slide-item-${index}`;
-}
-
-function animate(target: string, duration: number, properties: any) {
-  return new Promise<void>((resolve) => {
-    gsap.to(target, {
-      ...properties,
-      duration: duration,
-      onComplete: resolve,
-    });
-  });
-}
-
+const route = useRoute();
+const isHomePage = ref(route.name === 'home');
+const animationActive = ref(false);
 let order = [0, 1, 2, 3, 4];
 let detailsEven = true;
-let set: ((targets: any, vars: any) => any) | undefined;
-
 let offsetTop = 200;
 let offsetLeft = 700;
 let cardWidth = 200;
@@ -87,10 +53,50 @@ let cardHeight = 300;
 let gap = 40;
 let numberSize = 50;
 const ease = "sine.inOut";
+let animationTimeline: gsap.core.Timeline | null = null;
+
+watch(() => route.name, (newName) => {
+  isHomePage.value = newName === 'home';
+  if (isHomePage.value) {
+    startAnimation();
+  } else {
+    stopAnimation();
+  }
+});
+
+const _ = (id: string): HTMLElement | null => document.getElementById(id);
+const cards = data.map((i, index: number) => `<div class="card" id="card${index}" style="background-image:url(${i.image})"></div>`).join('');
+const cardContents = data.map((i, index: number) => `<div class="card-content" id="card-content-${index}">
+<div class="content-start"></div>
+<div class="content-title-1">${i.title}</div>
+<div class="content-title-2">${i.title2}</div>
+</div>`).join('');
+const sildeNumbers = data.map((_, index: number) => `<div class="item" id="slide-item-${index}">${index+1}</div>`).join('');
+
+function getCard(index: number): string { return `#card${index}`; }
+function getCardContent(index: number): string { return `#card-content-${index}`; }
+function getSliderItem(index: number): string { return `#slide-item-${index}`; }
+
+function resetAnimation() {
+  // Останавливаем все текущие анимации
+  if (animationTimeline) {
+    animationTimeline.kill();
+    animationTimeline = null;
+  }
+  gsap.killTweensOf(".card, .card-content, .details, .pagination, .indicator, .cover");
+
+  // Сбрасываем состояние
+  order = [0, 1, 2, 3, 4];
+  detailsEven = true;
+  animationActive.value = false;
+
+  // Скрываем все элементы
+  gsap.set(".card, .card-content, .details, .pagination, .indicator", { opacity: 0 });
+}
 
 function init() {
-  set = gsap.set;
-  
+  resetAnimation();
+
   const [active, ...rest] = order;
   const detailsActive = detailsEven ? "#details-even" : "#details-odd";
   const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
@@ -111,7 +117,10 @@ function init() {
     y: 0,
     width: window.innerWidth,
     height: window.innerHeight,
+    opacity: 1,
+    zIndex: 20
   });
+
   gsap.set(getCardContent(active), { x: 0, y: 0, opacity: 0 });
   gsap.set(detailsActive, { opacity: 0, zIndex: 22, x: -200 });
   gsap.set(detailsInactive, { opacity: 0, zIndex: 12 });
@@ -133,213 +142,193 @@ function init() {
       height: cardHeight,
       zIndex: 30,
       borderRadius: 10,
+      opacity: 1
     });
     gsap.set(getCardContent(i), {
       x: offsetLeft + 400 + index * (cardWidth + gap),
       zIndex: 40,
       y: offsetTop + cardHeight - 100,
+      opacity: 1
     });
     gsap.set(getSliderItem(i), { x: (index + 1) * numberSize });
   });
 
-  gsap.set(".indicator", { x: -window.innerWidth });
+  gsap.set(".indicator", { x: -window.innerWidth, opacity: 1 });
+  gsap.set(".cover", { x: 0, opacity: 1 });
+}
 
-  const startDelay = 0.6;
+async function step() {
+  const shifted = order.shift();
+  if (shifted !== undefined) {
+    order.push(shifted);
+  }
 
-  gsap.to(".cover", {
-    x: width + 400,
-    delay: 0.5,
+  detailsEven = !detailsEven;
+
+  const detailsActive = detailsEven ? "#details-even" : "#details-odd";
+  const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
+
+  const title1Element = document.querySelector(`${detailsActive} .title-1`);
+  if (title1Element && order.length > 0) {
+    title1Element.textContent = data[order[0]].title;
+  }
+
+  const title2Element = document.querySelector(`${detailsActive} .title-2`);
+  if (title2Element && order.length > 0) {
+    title2Element.textContent = data[order[0]].title2;
+  }
+
+  gsap.set(detailsActive, { zIndex: 22 });
+  gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
+  gsap.to(`${detailsActive} .text`, { y: 0, delay: 0.1, duration: 0.7, ease });
+  gsap.to(`${detailsActive} .title-1`, { y: 0, delay: 0.15, duration: 0.7, ease });
+  gsap.to(`${detailsActive} .title-2`, { y: 0, delay: 0.15, duration: 0.7, ease });
+  gsap.to(`${detailsActive} .desc`, { y: 0, delay: 0.3, duration: 0.4, ease });
+  gsap.to(`${detailsActive} .cta`, { y: 0, delay: 0.35, duration: 0.4, ease });
+
+  gsap.set(detailsInactive, { zIndex: 12 });
+
+  const [active, ...rest] = order;
+  const prv = rest[rest.length - 1];
+
+  gsap.set(getCard(prv), { zIndex: 10 });
+  gsap.set(getCard(active), { zIndex: 20 });
+  gsap.to(getCard(prv), { scale: 1.5, ease });
+
+  gsap.to(getCardContent(active), {
+    y: offsetTop + cardHeight - 10,
+    opacity: 0,
+    duration: 0.3,
     ease,
+  });
+  gsap.to(getSliderItem(active), { x: 0, ease });
+  gsap.to(getSliderItem(prv), { x: -numberSize, ease });
+  gsap.to(".progress-sub-foreground", {
+    width: 500 * (1 / order.length) * (active + 1),
+    ease,
+  });
+
+  gsap.to(getCard(active), {
+    x: 0,
+    y: 0,
+    ease,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    borderRadius: 0,
     onComplete: () => {
-      setTimeout(() => {
-        loop();
-      }, 500);
+      const xNew = offsetLeft + (rest.length - 1) * (cardWidth + gap);
+      gsap.set(getCard(prv), {
+        x: xNew,
+        y: offsetTop,
+        width: cardWidth,
+        height: cardHeight,
+        zIndex: 30,
+        borderRadius: 10,
+        scale: 1,
+      });
+
+      gsap.set(getCardContent(prv), {
+        x: xNew,
+        y: offsetTop + cardHeight - 100,
+        opacity: 1,
+        zIndex: 40,
+      });
+      gsap.set(getSliderItem(prv), { x: rest.length * numberSize });
+
+      gsap.set(detailsInactive, { opacity: 0 });
+      gsap.set(`${detailsInactive} .text`, { y: 100 });
+      gsap.set(`${detailsInactive} .title-1`, { y: 100 });
+      gsap.set(`${detailsInactive} .title-2`, { y: 100 });
+      gsap.set(`${detailsInactive} .desc`, { y: 50 });
+      gsap.set(`${detailsInactive} .cta`, { y: 60 });
     },
   });
 
+  rest.forEach((i, index) => {
+    if (i !== prv) {
+      const xNew = offsetLeft + index * (cardWidth + gap);
+      gsap.set(getCard(i), { zIndex: 30 });
+      gsap.to(getCard(i), {
+        x: xNew,
+        y: offsetTop,
+        width: cardWidth,
+        height: cardHeight,
+        ease,
+        delay: 0.1 * (index + 1),
+      });
+
+      gsap.to(getCardContent(i), {
+        x: xNew,
+        y: offsetTop + cardHeight - 100,
+        opacity: 1,
+        zIndex: 40,
+        ease,
+        delay: 0.1 * (index + 1),
+      });
+      gsap.to(getSliderItem(i), { x: (index + 1) * numberSize, ease });
+    }
+  });
+}
+
+async function loop() {
+  await gsap.to(".indicator", { x: 0, duration: 2, ease });
+  await gsap.to(".indicator", { x: window.innerWidth, duration: 0.8, delay: 0.3, ease });
+  gsap.set(".indicator", { x: -window.innerWidth });
+
+  if (animationActive.value) {
+    await step();
+    loop();
+  }
+}
+
+async function startInitialAnimation() {
+  const { innerWidth: width } = window;
+  const startDelay = 0.6;
+
+  // Анимация cover
+  await gsap.to(".cover", {
+    x: width + 400,
+    delay: 0.5,
+    ease,
+  });
+
+  animationActive.value = true;
+
+  // Анимация карточек
+  const [active, ...rest] = order;
   rest.forEach((i, index) => {
     gsap.to(getCard(i), {
       x: offsetLeft + index * (cardWidth + gap),
       zIndex: 30,
       ease,
-      delay: startDelay,
-    });
+    }, startDelay);
+
     gsap.to(getCardContent(i), {
       x: offsetLeft + index * (cardWidth + gap),
       zIndex: 40,
       ease,
-      delay: startDelay,
-    });
+    }, startDelay);
   });
 
-  gsap.to("#pagination", { y: 0, opacity: 1, ease, delay: startDelay });
-  gsap.to(detailsActive, { opacity: 1, x: 0, ease, delay: startDelay });
-}
+  // Анимация пагинации и деталей
+  gsap.to("#pagination", { y: 0, opacity: 1, ease }, startDelay);
+  gsap.to(detailsEven ? "#details-even" : "#details-odd", {
+    opacity: 1,
+    x: 0,
+    ease
+  }, startDelay);
 
-let clicks = 0;
-
-function step() {
-  return new Promise((resolve) => {
-    // Используем безопасный доступ к элементу массива
-    const shifted = order.shift();
-    if (shifted !== undefined) {
-      order.push(shifted);
-    }
-    
-    detailsEven = !detailsEven;
-
-    const detailsActive = detailsEven ? "#details-even" : "#details-odd";
-    const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
-
-    // Добавим проверки на null
-    const title1Element = document.querySelector(`${detailsActive} .title-1`);
-    if (title1Element && order.length > 0) {
-      title1Element.textContent = data[order[0]].title;
-    }
-    
-    const title2Element = document.querySelector(`${detailsActive} .title-2`);
-    if (title2Element && order.length > 0) {
-      title2Element.textContent = data[order[0]].title2;
-    }
-
-    gsap.set(detailsActive, { zIndex: 22 });
-    gsap.to(detailsActive, { opacity: 1, delay: 0.4, ease });
-    gsap.to(`${detailsActive} .text`, {
-      y: 0,
-      delay: 0.1,
-      duration: 0.7,
-      ease,
-    });
-    gsap.to(`${detailsActive} .title-1`, {
-      y: 0,
-      delay: 0.15,
-      duration: 0.7,
-      ease,
-    });
-    gsap.to(`${detailsActive} .title-2`, {
-      y: 0,
-      delay: 0.15,
-      duration: 0.7,
-      ease,
-    });
-    gsap.to(`${detailsActive} .desc`, {
-      y: 0,
-      delay: 0.3,
-      duration: 0.4,
-      ease,
-    });
-    gsap.to(`${detailsActive} .cta`, {
-      y: 0,
-      delay: 0.35,
-      duration: 0.4,
-      onComplete: resolve,
-      ease,
-    });
-
-    gsap.set(detailsInactive, { zIndex: 12 });
-
-    const [active, ...rest] = order;
-    const prv = rest[rest.length - 1];
-
-    gsap.set(getCard(prv), { zIndex: 10 });
-    gsap.set(getCard(active), { zIndex: 20 });
-    gsap.to(getCard(prv), { scale: 1.5, ease });
-
-    gsap.to(getCardContent(active), {
-      y: offsetTop + cardHeight - 10,
-      opacity: 0,
-      duration: 0.3,
-      ease,
-    });
-    gsap.to(getSliderItem(active), { x: 0, ease });
-    gsap.to(getSliderItem(prv), { x: -numberSize, ease });
-    gsap.to(".progress-sub-foreground", {
-      width: 500 * (1 / order.length) * (active + 1),
-      ease,
-    });
-
-    gsap.to(getCard(active), {
-      x: 0,
-      y: 0,
-      ease,
-      width: window.innerWidth,
-      height: window.innerHeight,
-      borderRadius: 0,
-      onComplete: () => {
-        const xNew = offsetLeft + (rest.length - 1) * (cardWidth + gap);
-        gsap.set(getCard(prv), {
-          x: xNew,
-          y: offsetTop,
-          width: cardWidth,
-          height: cardHeight,
-          zIndex: 30,
-          borderRadius: 10,
-          scale: 1,
-        });
-
-        gsap.set(getCardContent(prv), {
-          x: xNew,
-          y: offsetTop + cardHeight - 100,
-          opacity: 1,
-          zIndex: 40,
-        });
-        gsap.set(getSliderItem(prv), { x: rest.length * numberSize });
-
-        gsap.set(detailsInactive, { opacity: 0 });
-        gsap.set(`${detailsInactive} .text`, { y: 100 });
-        gsap.set(`${detailsInactive} .title-1`, { y: 100 });
-        gsap.set(`${detailsInactive} .title-2`, { y: 100 });
-        gsap.set(`${detailsInactive} .desc`, { y: 50 });
-        gsap.set(`${detailsInactive} .cta`, { y: 60 });
-        clicks -= 1;
-        if (clicks > 0) {
-          step();
-        }
-      },
-    });
-
-    rest.forEach((i, index) => {
-      if (i !== prv) {
-        const xNew = offsetLeft + index * (cardWidth + gap);
-        gsap.set(getCard(i), { zIndex: 30 });
-        gsap.to(getCard(i), {
-          x: xNew,
-          y: offsetTop,
-          width: cardWidth,
-          height: cardHeight,
-          ease,
-          delay: 0.1 * (index + 1),
-        });
-
-        gsap.to(getCardContent(i), {
-          x: xNew,
-          y: offsetTop + cardHeight - 100,
-          opacity: 1,
-          zIndex: 40,
-          ease,
-          delay: 0.1 * (index + 1),
-        });
-        gsap.to(getSliderItem(i), { x: (index + 1) * numberSize, ease });
-      }
-    });
-  });
-}
-
-async function loop() {
-  await animate(".indicator", 2, { x: 0, ease });
-  
-  await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3, ease });
-  
-  // Проверяем, что set инициализирован
-  if (set) {
-    set(".indicator", { x: -window.innerWidth });
-  } else {
-    // Если почему-то set не инициализирован, используем gsap.set напрямую
-    gsap.set(".indicator", { x: -window.innerWidth });
-  }
-  
-  await step();
   loop();
+}
+
+function stopAnimation() {
+  animationActive.value = false;
+  resetAnimation();
+}
+
+async function startAnimation() {
+  init();
+  await startInitialAnimation();
 }
 
 async function loadImage(src: string) {
@@ -356,56 +345,51 @@ async function loadImages() {
   return Promise.all(promises);
 }
 
-async function start() {
-  try {
-    // Инициализируем set
-    set = gsap.set;
-    
-    await loadImages();
-    
-    // Запускаем инициализацию после загрузки изображений
-    init();
-  } catch (error) {
-    console.error("One or more images failed to load", error);
-  }
-}
-
 onMounted(async () => {
   const demoElement = _('demo');
   if (demoElement) {
     demoElement.innerHTML = cards + cardContents;
   }
-  
+
   const slideNumbersElement = _('slide-numbers');
   if (slideNumbersElement) {
     slideNumbersElement.innerHTML = sildeNumbers;
   }
-  
+
   const prevButton = document.querySelector('.arrow-left');
   const nextButton = document.querySelector('.arrow-right');
 
   if (prevButton) {
     prevButton.addEventListener('click', () => {
-      clicks = 1;
-      step();
+      if (animationActive.value) {
+        step();
+      }
     });
   }
 
   if (nextButton) {
     nextButton.addEventListener('click', () => {
-      clicks = 1;
-      step();
+      if (animationActive.value) {
+        step();
+      }
     });
   }
-  
-  await start();
+
+  await loadImages();
+  if (isHomePage.value) {
+    startAnimation();
+  }
+});
+
+onUnmounted(() => {
+  stopAnimation();
 });
 </script>
 
 <template>
   <div class="home-view">
     <div id="demo"></div>
-    
+
     <div style="color: black">
       <div class="details" id="details-even">
         <div class="place-box">
@@ -427,37 +411,37 @@ onMounted(async () => {
       </div>
 
       <div class="pagination" id="pagination">
-        <div class="arrow arrow-left" style="display: none">
+        <div class="arrow arrow-left">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.75 19.5L8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
             />
           </svg>
         </div>
-        <div class="arrow arrow-right" style="display: none">
+        <div class="arrow arrow-right">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
             />
           </svg>
         </div>
         <div class="progress-sub-container" >
           <div class="progress-sub-background" >
-              <div class="progress-sub-foreground" ></div>
+            <div class="progress-sub-foreground" ></div>
           </div>
         </div>
         <div class="slide-numbers" id="slide-numbers"></div>
@@ -485,13 +469,6 @@ onMounted(async () => {
   box-shadow: 6px 6px 10px 2px rgba(0, 0, 0, 0.6);
 }
 
-#btn {
-  position: absolute;
-  top: 690px;
-  left: 16px;
-  z-index: 99;
-}
-
 .card-content {
   position: absolute;
   left: 0;
@@ -503,9 +480,6 @@ onMounted(async () => {
 .content-place {
   margin-top: 6px;
   font-size: 13px;
-  font-weight: 500;
-}
-.content-place {
   font-weight: 500;
 }
 
@@ -581,36 +555,6 @@ onMounted(async () => {
   align-items: center;
 }
 
-.bookmark {
-  border: none;
-  background-color: var(--primary-color);
-  width: 36px;
-  height: 36px;
-  border-radius: 99px;
-  color: white;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-}
-
-.bookmark svg {
-  width: 20px;
-  height: 20px;
-}
-
-.discover {
-  border: 1px solid #ffffff;
-  background-color: transparent;
-  height: 36px;
-  border-radius: 99px;
-  color: #ffffff;
-  padding: 4px 24px;
-  font-size: 12px;
-  margin-left: 16px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
 .pagination {
   position: absolute;
   left: 0px;
@@ -626,6 +570,7 @@ onMounted(async () => {
   border: 2px solid #ffffff55;
   display: grid;
   place-items: center;
+  cursor: pointer;
 }
 
 .arrow:nth-child(2) {

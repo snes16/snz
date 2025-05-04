@@ -460,7 +460,7 @@ onMounted(async () => {
   <div v-if="isHomePage" class="indicator"></div>
   
   <nav>
-    <div>
+    <div class="logo-container-desktop">
       <a href="/" class="logo-link">
         <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
             alt="SNZ"
@@ -474,6 +474,14 @@ onMounted(async () => {
       <a href="/interior" class="nav-link">Интерьер</a>
       <a href="/landscape" class="nav-link">Ландшафты</a>
       <a href="/contacts" class="nav-link">Контакты</a>
+    </div>
+    <div class="logo-container-mobile">
+      <a href="/" class="logo-link">
+        <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
+            alt="SNZ"
+            style="height: 120px"
+        />
+      </a>
     </div>
   </nav>
   
@@ -667,6 +675,10 @@ nav {
   backdrop-filter: blur(5px);
 }
 
+.logo-container-mobile {
+  display: none;
+}
+
 nav svg {
   width: 20px;
   height: 20px;
@@ -685,15 +697,6 @@ nav > div {
   font-size: 14px;
 }
 
-nav > div:first-child {
-  gap: 20px;
-  margin-right: 40px;
-}
-
-/* Обновленные стили для навигации */
-.nav-links {
-  gap: 50px;
-}
 
 .nav-link {
   color: var(--text-color);
@@ -704,6 +707,7 @@ nav > div:first-child {
   padding-bottom: 4px;
   font-weight: 600;
   font-size: 1.8rem;
+  margin-right: 50px;
 }
 
 .nav-link:hover {
@@ -738,6 +742,108 @@ nav > div:first-child {
 
 .logo-link:hover {
   transform: scale(1.05);
+}
+
+
+
+/* Медиа запросы для адаптивности */
+@media (max-width: 992px) {
+  .nav-link {
+    color: initial;
+    text-decoration: initial;
+    position: initial;
+    cursor: initial;
+    transition: initial;
+    padding-bottom: initial;
+    font-size: initial;
+    margin-right: initial;
+  }
+
+  .nav-link:hover {
+    opacity: initial;
+    color: initial;
+  }
+
+  .nav-link::after {
+    content: initial;
+    position: initial;
+    bottom: initial;
+    left: initial;
+    width: initial;
+    height: initial;
+    background-color: initial;
+    transition: initial;
+    border-radius: initial;
+  }
+
+  .nav-link:hover::after {
+    width: initial;
+  }
+
+  .nav-link.active::after {
+    width: initial;
+  }
+
+  .logo-link {
+    display: initial;
+    transition: initial;
+  }
+
+  .logo-link:hover {
+    transform: initial;
+  }
+
+  nav {
+    position: sticky;
+    height: 200px;
+    left: 0;
+    right: 0;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 10px !important;
+    align-items: center;
+  }
+
+  .logo-container-desktop {
+    display: none;
+  }
+
+  .logo-container-mobile {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .logo-container-mobile {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+/* Дополнительные стили для очень маленьких экранов */
+@media (max-width: 480px) {
+  .logo-link img {
+    height: 80px !important;
+  }
 }
 
 .indicator {

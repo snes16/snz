@@ -142,7 +142,7 @@ onMounted(() => {
   min-height: 100vh;
   color: #333;
   padding-top: 1rem;
-  margin-top: 186px;
+  margin-top: 185px;
 }
 
 .page-container {
@@ -206,11 +206,11 @@ onMounted(() => {
 /* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
-  padding: 2rem 2rem 2rem 400px; /* Добавляем отступ слева равный ширине сайдбара + padding */
+  padding: 2rem 2rem 2rem 400px;
   overflow-y: auto;
   height: calc(100vh - 20px);
   max-height: 1030px;
-  margin-left: auto; /* Ширина сайдбара */
+  margin-left: auto;
   margin-top: -17px;
   width: 50%;
 }
@@ -264,50 +264,74 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Медиа запросы для адаптивности */
 @media (max-width: 992px) {
   .page-container {
     flex-direction: column;
+    height: 100vh;
   }
 
   .sidebar {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    position: relative;
-    top: 0;
-    border-right: none;
-    border-bottom: 1px solid #eaeaea;
-    overflow-y: visible;
-    padding: 1rem;
-    background-color: transparent;
+    display: none;
   }
 
   .content {
-    height: auto;
-    max-height: none;
-    overflow-y: visible;
+    width: 100%;
     padding: 1rem;
     margin-left: 0;
+    height: auto;
+    max-height: 100vh;
+    overflow-y: auto;
   }
 
-  .project-nav ul {
-    display: flex;
-    flex-wrap: wrap;
+  .project-card {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .project-title {
+    font-size: 1.5rem;
+  }
+
+  .project-description {
+    font-size: 1.1rem;
+  }
+
+  .architecture-page {
+    margin-top: 0;
+  }
+
+  .content {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .project-meta {
+    flex-direction: column;
     gap: 0.5rem;
   }
 
-  .project-nav a {
-    padding: 0.5rem 1rem;
-    border-left: none;
-    border-bottom: 3px solid transparent;
-    font-size: 20px;
+  .project-image {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .architecture-page {
+    margin-top: 0;
   }
 
-  .project-nav a:hover,
-  .project-nav a.active {
-    border-left-color: transparent;
-    border-bottom-color: var(--primary-color, #ecad29);
+  .content {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .project-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .project-image {
+    margin-bottom: 1rem;
   }
 }
 </style>

@@ -135,7 +135,7 @@ onMounted(() => {
   min-height: 100vh;
   color: #333;
   padding-top: 1rem;
-  margin-top: 186px;
+  margin-top: 185px;
 }
 
 .page-container {
@@ -257,7 +257,7 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Медиа запросы для адаптивности */
+
 @media (max-width: 992px) {
   .page-container {
     flex-direction: column;
@@ -301,6 +301,76 @@ onMounted(() => {
   .project-nav a.active {
     border-left-color: transparent;
     border-bottom-color: var(--primary-color, #ecad29);
+  }
+}
+@media (max-width: 992px) {
+  .page-container {
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    width: 100%;
+    padding: 1rem;
+    margin-left: 0;
+    height: auto;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .project-card {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .project-title {
+    font-size: 1.5rem;
+  }
+
+  .project-description {
+    font-size: 1.1rem;
+  }
+
+  .interior-page {
+    margin-top: 0;
+  }
+
+  .content {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .project-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .project-image {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .interior-page {
+    margin-top: 0;
+  }
+
+  .content {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .project-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .project-image {
+    margin-bottom: 1rem;
   }
 }
 </style>

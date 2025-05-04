@@ -411,7 +411,7 @@ onUnmounted(() => {
       </div>
 
       <div class="pagination" id="pagination">
-        <div class="arrow arrow-left">
+        <div class="arrow arrow-left" style="display: none">
           <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -425,7 +425,7 @@ onUnmounted(() => {
             />
           </svg>
         </div>
-        <div class="arrow arrow-right">
+        <div class="arrow arrow-right" style="display: none">
           <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

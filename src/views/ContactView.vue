@@ -327,9 +327,17 @@ const submitForm = () => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+  .contact-page {
+    margin-top: 0;
+    padding: 20px 20px 200px;
+    max-height: 100vh;
+    overflow: auto;
+  }
+
   .contact-grid {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .title {
@@ -339,8 +347,7 @@ const submitForm = () => {
 
   .map-container {
     height: 350px;
-    order: -1;
-    margin-bottom: 2rem;
+    margin-top: 2rem;
   }
 
   .modal-content {

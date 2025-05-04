@@ -341,7 +341,8 @@ onMounted(() => {
 
   .content {
     overflow: auto;
-    height: 100vh;
+    height: calc(100vh - 200px);
+    padding-bottom: 200px;
   }
 
   .project-meta {
@@ -354,14 +355,15 @@ onMounted(() => {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .interior-page {
     margin-top: 0;
   }
 
   .content {
     overflow: auto;
-    height: 100vh;
+    height: calc(100vh - 200px);
+    padding-bottom: 200px;
   }
 
   .project-meta {

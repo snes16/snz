@@ -101,8 +101,37 @@ function init() {
   const detailsActive = detailsEven ? "#details-even" : "#details-odd";
   const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
   const { innerHeight: height, innerWidth: width } = window;
-  offsetTop = height - 430;
-  offsetLeft = width - 830;
+  
+  // Адаптивные размеры для мобильных устройств
+  if (width <= 480) {
+    cardWidth = 150;
+    cardHeight = 200;
+    gap = 20;
+    numberSize = 30;
+    offsetTop = height - 300;
+    offsetLeft = width - 400;
+  } else if (width <= 768) {
+    cardWidth = 180;
+    cardHeight = 250;
+    gap = 30;
+    numberSize = 40;
+    offsetTop = height - 350;
+    offsetLeft = width - 500;
+  } else if (width <= 992) {
+    cardWidth = 200;
+    cardHeight = 280;
+    gap = 35;
+    numberSize = 45;
+    offsetTop = height - 400;
+    offsetLeft = width - 600;
+  } else {
+    cardWidth = 200;
+    cardHeight = 300;
+    gap = 40;
+    numberSize = 50;
+    offsetTop = height - 430;
+    offsetLeft = width - 830;
+  }
 
   gsap.set("#pagination", {
     top: offsetTop + 330,
@@ -633,5 +662,137 @@ onUnmounted(() => {
   height: 100vh;
   background-color: #fff;
   z-index: 100;
+}
+
+@media (max-width: 992px) {
+
+  .home-view {
+    margin-top: -180px;
+  }
+  .details {
+    top: 180px;
+    left: 30px;
+  }
+
+  .title-1,
+  .title-2 {
+    font-size: 48px;
+  }
+
+  .title-box-1 {
+    margin-top: 20px;
+  }
+
+  .title-box-1,
+  .title-box-2 {
+    height: 70px;
+  }
+
+  .desc {
+    width: 80%;
+    max-width: 400px;
+  }
+
+  .slide-numbers {
+    width: 40px;
+    height: 40px;
+  }
+
+  .slide-numbers .item {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+
+  .arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .details {
+    top: 150px;
+    left: 20px;
+  }
+
+  .title-1,
+  .title-2 {
+    font-size: 36px;
+  }
+
+  .title-box-1,
+  .title-box-2 {
+    height: 50px;
+  }
+
+  .desc {
+    width: 90%;
+    font-size: 14px;
+  }
+
+  .progress-sub-container {
+    width: 200px;
+  }
+
+  .progress-sub-background {
+    width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .details {
+    top: 120px;
+    left: 15px;
+  }
+
+  .title-1,
+  .title-2 {
+    font-size: 28px;
+  }
+
+  .title-box-1,
+  .title-box-2 {
+    height: 40px;
+  }
+
+  .desc {
+    width: 95%;
+    font-size: 13px;
+  }
+
+  .progress-sub-container {
+    width: 150px;
+  }
+
+  .progress-sub-background {
+    width: 150px;
+  }
+
+  .slide-numbers {
+    width: 30px;
+    height: 30px;
+  }
+
+  .slide-numbers .item {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+
+  .arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .arrow svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 </style>

@@ -279,7 +279,7 @@ onMounted(() => {
     padding: 1rem;
     margin-left: 0;
     height: auto;
-    max-height: 100vh;
+    max-height: calc(100vh - 200px);
     overflow-y: auto;
   }
 
@@ -301,8 +301,9 @@ onMounted(() => {
   }
 
   .content {
-    overflow: auto;
-    height: 100vh;
+    height: auto;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
   }
 
   .project-meta {

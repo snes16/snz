@@ -810,6 +810,7 @@ nav > div {
     display: flex;
     gap: 10px !important;
     align-items: center;
+    margin-top: 10px;
   }
 
   .logo-container-desktop {
@@ -819,7 +820,7 @@ nav > div {
   .logo-container-mobile {
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 20px;
   }
 
   nav {
@@ -843,6 +844,10 @@ nav > div {
 @media (max-width: 480px) {
   .logo-link img {
     height: 80px !important;
+  }
+
+  .nav-links {
+    margin-top: 10px;
   }
 }
 

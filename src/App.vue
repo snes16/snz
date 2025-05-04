@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import gsap from 'gsap';
 
@@ -375,6 +375,12 @@ const route = useRoute();
 // Check if we're on the home page
 const isHomePage = computed(() => route.name === 'home');
 
+const isNavCollapsed = ref(true);
+
+function toggleNav() {
+  isNavCollapsed.value = !isNavCollapsed.value;
+}
+
 onMounted(async () => {
   const demoElement = _('demo');
   if (demoElement) {
@@ -460,6 +466,15 @@ onMounted(async () => {
   <div v-if="isHomePage" class="indicator"></div>
 
   <nav>
+    <div class="arrow-container">
+      <button class="nav-arrow" @click="toggleNav">
+        <div class="burger-menu" :class="{ 'active': isNavCollapsed }">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+    </div>
     <div class="logo-container-desktop">
       <a href="/" class="logo-link">
         <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
@@ -469,11 +484,13 @@ onMounted(async () => {
       </a>
     </div>
     <div class="nav-links">
-      <a href="/" class="nav-link active">Главная</a>
-      <a href="/architecture" class="nav-link">Архитектура</a>
-      <a href="/interior" class="nav-link">Интерьер</a>
-      <a href="/landscape" class="nav-link">Ландшафты</a>
-      <a href="/contacts" class="nav-link">Контакты</a>
+      <div class="nav-items" :class="{ 'nav-items-collapsed': isNavCollapsed }">
+        <a href="/" class="nav-link active">Главная</a>
+        <a href="/architecture" class="nav-link">Архитектура</a>
+        <a href="/interior" class="nav-link">Интерьер</a>
+        <a href="/landscape" class="nav-link">Ландшафты</a>
+        <a href="/contacts" class="nav-link">Контакты</a>
+      </div>
     </div>
     <div class="logo-container-mobile">
       <a href="/" class="logo-link">
@@ -647,6 +664,10 @@ body {
   height: 20px;
 }
 
+.arrow-container {
+  display: none;
+}
+
 .discover {
   border: 1px solid #ffffff;
   background-color: transparent;
@@ -697,7 +718,6 @@ nav > div {
   font-size: 14px;
 }
 
-
 .nav-link {
   color: white;
   text-decoration: none;
@@ -744,10 +764,37 @@ nav > div {
   transform: scale(1.05);
 }
 
-
-
 /* Медиа запросы для адаптивности */
 @media (max-width: 992px) {
+  .nav-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 10px;
+  }
+
+  .nav-arrow-icon,
+  .nav-arrow-icon-active {
+    display: none;
+  }
+
+  .nav-items {
+    display: none;
+    flex-direction: column;
+    padding-left: 20px;
+  }
+
+  .nav-items-collapsed {
+    display: flex;
+  }
+
   .nav-link {
     color: white;
     text-decoration: initial;
@@ -793,14 +840,51 @@ nav > div {
     transform: initial;
   }
 
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s ease, opacity 0.3s ease;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 5px;
+  }
+
+  .nav-link:hover {
+    opacity: 1;
+    color: var(--primary-color);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+    border-radius: 99px;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+
   nav {
+    flex-direction: row;
     position: sticky;
     height: 200px;
     left: 0;
     right: 0;
     padding: 1rem 2rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     z-index: 100;
     backdrop-filter: blur(10px);
@@ -808,13 +892,23 @@ nav > div {
 
   .nav-links {
     display: flex;
-    gap: 10px !important;
+    gap: 15px !important;
     align-items: center;
     margin-top: 10px;
   }
 
   .logo-container-desktop {
     display: none;
+  }
+
+  .arrow-container {
+    margin-top: 20px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    button {
+      outline: none;
+    }
   }
 
   .logo-container-mobile {
@@ -824,8 +918,8 @@ nav > div {
   }
 
   nav {
-    flex-direction: column;
     align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .nav-links {
@@ -938,5 +1032,55 @@ nav > div {
   height: 100vh;
   background-color: #fff;
   z-index: 100;
+}
+
+/* Добавляем новые стили для бургер-меню */
+.burger-menu {
+  width: 35px;
+  height: 25px;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.burger-menu span {
+  display: block;
+  position: absolute;
+  height: 3px;
+  width: 100%;
+  background: white;
+  border-radius: 3px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: .25s ease-in-out;
+}
+
+.burger-menu span:nth-child(1) {
+  top: 0px;
+}
+
+.burger-menu span:nth-child(2) {
+  top: 11px;
+}
+
+.burger-menu span:nth-child(3) {
+  top: 22px;
+}
+
+.burger-menu.active span:nth-child(1) {
+  top: 8px;
+  transform: rotate(135deg);
+}
+
+.burger-menu.active span:nth-child(2) {
+   opacity: 0;
+ }
+
+.burger-menu.active span:nth-child(3) {
+  top: 8px;
+  transform: rotate(-135deg);
 }
 </style>

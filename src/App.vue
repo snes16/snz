@@ -91,7 +91,7 @@ const ease = "sine.inOut";
 
 function init() {
   set = gsap.set;
-  
+
   const [active, ...rest] = order;
   const detailsActive = detailsEven ? "#details-even" : "#details-odd";
   const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
@@ -186,7 +186,7 @@ function step() {
     if (shifted !== undefined) {
       order.push(shifted);
     }
-    
+
     detailsEven = !detailsEven;
 
     const detailsActive = detailsEven ? "#details-even" : "#details-odd";
@@ -197,7 +197,7 @@ function step() {
     if (title1Element && order.length > 0) {
       title1Element.textContent = data[order[0]].title;
     }
-    
+
     const title2Element = document.querySelector(`${detailsActive} .title-2`);
     if (title2Element && order.length > 0) {
       title2Element.textContent = data[order[0]].title2;
@@ -327,10 +327,10 @@ function step() {
 
 async function loop() {
   if (!isHomePage.value) return;
-  
+
   await animate(".indicator", 2, { x: 0 });
   await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
-  
+
   // Проверяем, что set инициализирован
   if (set) {
     set(".indicator", { x: -window.innerWidth });
@@ -338,7 +338,7 @@ async function loop() {
     // Если почему-то set не инициализирован, используем gsap.set напрямую
     gsap.set(".indicator", { x: -window.innerWidth });
   }
-  
+
   await step();
   loop();
 }
@@ -361,7 +361,7 @@ async function start() {
   try {
     // Теперь мы можем использовать gsap напрямую, без необходимости загрузки через CDN
     await loadImages();
-    
+
     // Запускаем инициализацию только после полной загрузки изображений
     init();
   } catch (error) {
@@ -380,12 +380,12 @@ onMounted(async () => {
   if (demoElement) {
     demoElement.innerHTML = cards + cardContents;
   }
-  
+
   const slideNumbersElement = _('slide-numbers');
   if (slideNumbersElement) {
     slideNumbersElement.innerHTML = sildeNumbers;
   }
-  
+
   const prevButton = document.querySelector('.arrow-left');
   const nextButton = document.querySelector('.arrow-right');
 
@@ -402,20 +402,20 @@ onMounted(async () => {
       step();
     });
   }
-  
+
   // Добавляем обработчики для навигации
   const setupNavigation = () => {
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        
+
         // Удаляем активный класс у всех ссылок
         navLinks.forEach(l => l.classList.remove('active'));
-        
+
         // Добавляем активный класс текущей ссылке
         link.classList.add('active');
-        
+
         // Переходим по указанному маршруту
         const href = link.getAttribute('href');
         if (href) {
@@ -423,33 +423,33 @@ onMounted(async () => {
         }
       });
     });
-    
+
     // Добавляем обработчик для логотипа
     const logoLink = document.querySelector('.logo-link');
     if (logoLink) {
       logoLink.addEventListener('click', (e) => {
         e.preventDefault();
-        
+
         // Активируем ссылку "Главная"
         const homeLink = document.querySelector('.nav-link[href="/"]');
         if (homeLink) {
           // Удаляем активный класс у всех ссылок
           navLinks.forEach(l => l.classList.remove('active'));
-          
+
           // Добавляем активный класс ссылке "Главная"
           homeLink.classList.add('active');
         }
-        
+
         // Переходим на главную страницу
         router.push('/');
       });
     }
   };
-  
+
   // Запускаем настройку навигации после небольшой задержки,
   // чтобы DOM успел загрузиться
   setTimeout(setupNavigation, 100);
-  
+
   await start();
 });
 </script>
@@ -458,7 +458,7 @@ onMounted(async () => {
 <div class="app-container">
   <!-- Only render the indicator on the home page -->
   <div v-if="isHomePage" class="indicator"></div>
-  
+
   <nav>
     <div class="logo-container-desktop">
       <a href="/" class="logo-link">
@@ -484,7 +484,7 @@ onMounted(async () => {
       </a>
     </div>
   </nav>
-  
+
   <!-- Здесь будет отображаться содержимое маршрутов -->
   <router-view />
 </div>

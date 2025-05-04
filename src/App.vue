@@ -511,7 +511,7 @@ body {
   color: var(--text-color);
   position: relative;
   overflow: hidden;
-  font-family: var(--main-font);
+  font-family:  "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
   font-weight: 500;
 }
 
@@ -559,7 +559,7 @@ body {
 .content-title-2 {
   font-weight: 700;
   font-size: 20px;
-  font-family: var(--main-font);
+  font-family:  "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
 }
 
 .content-start {
@@ -603,7 +603,7 @@ body {
 .title-2 {
   font-weight: 700;
   font-size: 72px;
-  font-family: var(--main-font);
+  font-family:  "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
   line-height: 1.1;
 }
 
@@ -699,7 +699,7 @@ nav > div {
 
 
 .nav-link {
-  color: var(--text-color);
+  color: white;
   text-decoration: none;
   position: relative;
   cursor: pointer;
@@ -749,7 +749,7 @@ nav > div {
 /* Медиа запросы для адаптивности */
 @media (max-width: 992px) {
   .nav-link {
-    color: initial;
+    color: white;
     text-decoration: initial;
     position: initial;
     cursor: initial;

@@ -1,17 +1,23 @@
 console.log('Cursor script started loading...');
 
-const canvas = document.getElementById('canvas');
-if (!canvas) {
-    console.error('Canvas element not found!');
+// Создаем два canvas
+const cursorCanvas = document.querySelector("canvas");
+const bgCanvas = document.createElement('canvas');
+document.body.appendChild(bgCanvas);
+
+if (!cursorCanvas || !bgCanvas) {
+    console.error('Canvas elements not found!');
 } else {
-    console.log('Canvas element found successfully');
+    console.log('Canvas elements found successfully');
 }
 
-const ctx = canvas.getContext('2d');
-if (!ctx) {
+const cursorCtx = cursorCanvas.getContext('2d');
+const bgCtx = bgCanvas.getContext('2d');
+
+if (!cursorCtx || !bgCtx) {
     console.error('Could not get canvas context!');
 } else {
-    console.log('Canvas context obtained successfully');
+    console.log('Canvas contexts obtained successfully');
 }
 
 // для вводной анимации
@@ -24,7 +30,7 @@ const pointer = {
 
 const params = {
     pointsNumber: 40,
-    widthFactor: .15,
+    widthFactor: .05,
     mouseThreshold: .6,
     spring: .4,
     friction: .5
@@ -60,8 +66,21 @@ function updateMousePosition(eX, eY) {
 }
 
 function setupCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    cursorCanvas.width = window.innerWidth;
+    cursorCanvas.height = window.innerHeight;
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+
+    // Копируем содержимое страницы на bgCanvas
+    html2canvas(document.body).then(canvas => {
+        bgCtx.drawImage(canvas, 0, 0);
+    });
+}
+
+function getColorAt(x, y) {
+    const pixel = bgCtx.getImageData(x, y, 1, 1).data;
+    const brightness = (pixel[0] * 0.299 + pixel[1] * 0.587 + pixel[2] * 0.114) / 255;
+    return brightness > 0.5 ? 'rgba(0, 0, 0, ' : 'rgba(255, 255, 255, ';
 }
 
 setupCanvas();
@@ -74,7 +93,7 @@ function update(t) {
         pointer.y = (.5 + .2 * (Math.cos(.005 * t)) + .1 * Math.cos(.01 * t)) * window.innerHeight;
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    cursorCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
     trail.forEach((p, pIdx) => {
         const prev = pIdx === 0 ? pointer : trail[pIdx - 1];
         const spring = pIdx === 0 ? .4 * params.spring : params.spring;
@@ -86,22 +105,23 @@ function update(t) {
         p.y += p.dy;
     });
 
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.moveTo(trail[0].x, trail[0].y);
+    cursorCtx.lineCap = "round";
+    cursorCtx.beginPath();
+    cursorCtx.moveTo(trail[0].x, trail[0].y);
 
     for (let i = 1; i < trail.length - 1; i++) {
         const xc = .5 * (trail[i].x + trail[i + 1].x);
         const yc = .5 * (trail[i].y + trail[i + 1].y);
-        ctx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
-        ctx.lineWidth = params.widthFactor * (params.pointsNumber - i);
-        ctx.strokeStyle = `rgba(0, 0, 0, ${1 - i/params.pointsNumber})`;
-        ctx.stroke();
+        cursorCtx.quadraticCurveTo(trail[i].x, trail[i].y, xc, yc);
+        cursorCtx.lineWidth = params.widthFactor * (params.pointsNumber - i);
+        const color = getColorAt(Math.round(trail[i].x), Math.round(trail[i].y));
+        cursorCtx.strokeStyle = color + (1 - i/params.pointsNumber) + ')';
+        cursorCtx.stroke();
     }
-    ctx.lineTo(trail[trail.length - 1].x, trail[trail.length - 1].y);
-    ctx.stroke();
-    
+    cursorCtx.lineTo(trail[trail.length - 1].x, trail[trail.length - 1].y);
+    cursorCtx.stroke();
+
     window.requestAnimationFrame(update);
 }
 
-console.log('Cursor script finished loading'); 
+console.log('Cursor script finished loading');

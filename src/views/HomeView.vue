@@ -33,7 +33,7 @@ const data = [
     image: 'https://snzproject.com/wp-content/uploads/2025/05/manikyur_2_interactive-lightmix_view05_dark.jpg'
   },
   {
-    place: 'Название',
+    place: '',
     title: 'Французский сад',
     title2: '',
     description: 'Los Lances Beach in Tarifa is a coastal paradise known for its consistent winds, making it a world-renowned spot for kitesurfing and windsurfing. The beach\'s long, sandy shores provide ample space for relaxation and sunbathing, with a vibrant atmosphere of beach bars and cafes.',

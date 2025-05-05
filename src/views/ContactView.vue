@@ -56,7 +56,7 @@
               </div>
               <div class="form-group checkbox-group">
                 <input type="checkbox" id="agreement" v-model="formData.agreement" required>
-                <label for="agreement">Я согласен на обработку персональных данных</label>
+                <label for="agreement">Я согласен(сна) на обработку персональных данных</label>
               </div>
               <button type="submit" class="submit-button">Отправить</button>
             </form>

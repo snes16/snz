@@ -1,16 +1,30 @@
+@font-face {
+  font-family: 'Century Gothic Regular';
+  src: url('CenturyGothic.eot');
+  src: url('CenturyGothic.eot?#iefix') format('embedded-opentype'),
+       url('CenturyGothic.woff') format('woff'),
+       url('CenturyGothic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  --font-family: 'Century Gothic Regular', 'Century Gothic', CenturyGothic, AppleGothic, 'Segoe UI', Roboto, Arial, sans-serif;
+  
   line-height: 1.5;
   font-weight: 400;
-  
   color-scheme: light dark;
   color: #333;
   background-color: #fff;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: var(--font-family);
 }
 
 * {
@@ -35,7 +49,7 @@ button {
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
+  font-family: var(--font-family);
   background-color: #f9f9f9;
   cursor: pointer;
   transition: border-color 0.25s;
@@ -61,11 +75,9 @@ h1 {
 }
 
 @media (max-width: 768px) {
-
   button {
     padding: 0.5em 1em;
     font-size: 0.9em;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
   }
 
   h1 {
@@ -74,11 +86,9 @@ h1 {
 }
 
 @media (max-width: 480px) {
-
   button {
     padding: 0.4em 0.8em;
     font-size: 0.85em;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
   }
 
   h1 {

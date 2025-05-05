@@ -766,6 +766,12 @@ nav > div {
 
 /* Медиа запросы для адаптивности */
 @media (max-width: 992px) {
+  .content-title-1,
+  .content-title-2 {
+    font-weight: 700;
+    font-size: 14px;
+    font-family:  "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
+  }
   .nav-section {
     display: flex;
     align-items: center;

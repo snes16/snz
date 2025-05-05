@@ -94,17 +94,51 @@ const closeModal = () => {
 };
 
 // Отправка формы
-const submitForm = () => {
-  console.log('Форма отправлена:', formData.value);
-  alert('Ваша заявка успешно отправлена!');
-  closeModal();
-  formData.value = {
-    name: '',
-    phone: '',
-    email: '',
-    agreement: false
-  };
+const submitForm = async () => {
+  const { name, phone, email, agreement } = formData.value;
+
+  if (!agreement) {
+    alert("Вы должны согласиться на обработку персональных данных.");
+    return;
+  }
+
+  const token = '7473689022:AAEueEmsA-kdeeZxykBrcTvEccpzzq_538k';
+  const chatIds = ['1472870243']; // Добавь сюда нужные chat_id
+
+  const message = `📩 Новая заявка с сайта:\n\n👤 ФИО: ${name}\n📞 Телефон: ${phone}\n📧 Email: ${email}`;
+
+  try {
+    const results = await Promise.all(
+        chatIds.map(chat_id =>
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chat_id, text: message })
+            })
+        )
+    );
+
+    const allSuccessful = results.every(res => res.ok);
+
+    if (allSuccessful) {
+      alert('Ваша заявка успешно отправлена!');
+      closeModal();
+      formData.value = {
+        name: '',
+        phone: '',
+        email: '',
+        agreement: false
+      };
+    } else {
+      alert('Ошибка при отправке хотя бы в один из чатов.');
+    }
+  } catch (error) {
+    console.error('Ошибка отправки:', error);
+    alert('Ошибка при отправке. Проверьте соединение.');
+  }
 };
+
+
 </script>
 
 <style scoped>

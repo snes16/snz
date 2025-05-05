@@ -331,7 +331,7 @@ const submitForm = () => {
   .contact-page {
     margin-top: 0;
     padding: 20px 20px 200px;
-    max-height: 100vh;
+    max-height: calc(100vh - 120px);
     overflow: auto;
   }
 
@@ -348,6 +348,7 @@ const submitForm = () => {
   .map-container {
     height: 350px;
     margin-top: 2rem;
+    margin-bottom: 3rem;
   }
 
   .modal-content {

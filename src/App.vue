@@ -575,7 +575,7 @@ body {
 .content-title-1,
 .content-title-2 {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 18px;
   font-family:  "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
 }
 

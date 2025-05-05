@@ -6,38 +6,38 @@ import gsap from 'gsap';
 const data = [
   {
     place: 'Switzerland Alps',
-    title: 'Название',
+    title: '\u2003\u2003ЖК в г. Шали',
     title2: '',
     description: 'Tucked away in the Switzerland Alps, Saint Antönien offers an idyllic retreat for those seeking tranquility and adventure alike. It\'s a hidden gem for backcountry skiing in winter and boasts lush trails for hiking and mountain biking during the warmer months.',
-    image: 'https://snzproject.com/wp-content/uploads/2025/04/banner1.png'
+    image: 'https://snzproject.com/wp-content/uploads/2025/05/scene-13_-scaled.png'
   },
   {
     place: '',
-    title: 'Название',
+    title: 'Леруа Мерлен',
     title2: '',
     description: 'Nagano Prefecture, set within the majestic Japan Alps, is a cultural treasure trove with its historic shrines and temples, particularly the famous Zenkō-ji. The region is also a hotspot for skiing and snowboarding, offering some of the country\'s best powder.',
-    image: 'https://snzproject.com/wp-content/uploads/2023/12/group-881.png'
+    image: 'https://snzproject.com/wp-content/uploads/2025/05/8.2-scaled.jpg'
   },
   {
     place: '',
-    title: 'Название',
+    title: 'Визит-центр Чарын',
     title2: '',
     description: 'The journey from the vibrant souks and palaces of Marrakech to the tranquil, starlit sands of Merzouga showcases the diverse splendor of Morocco. Camel treks and desert camps offer an unforgettable immersion into the nomadic way of life.',
-    image: 'https://snzproject.com/wp-content/uploads/2023/12/bg4.png'
+    image: 'https://snzproject.com/wp-content/uploads/2025/05/enhanced_1_8-photo-scaled.png'
   },
   {
     place: '',
-    title: 'Название',
+    title: 'Салон "Aneli"',
     title2: '',
     description: 'Yosemite National Park is a showcase of the American wilderness, revered for its towering granite monoliths, ancient giant sequoias, and thundering waterfalls. The park offers year-round recreational activities, from rock climbing to serene valley walks.',
-    image: 'https://snzproject.com/wp-content/uploads/2023/12/bg3.png'
+    image: 'https://snzproject.com/wp-content/uploads/2025/05/manikyur_2_interactive-lightmix_view05_dark.jpg'
   },
   {
     place: 'Название',
-    title: 'Название',
+    title: 'Французский сад',
     title2: '',
     description: 'Los Lances Beach in Tarifa is a coastal paradise known for its consistent winds, making it a world-renowned spot for kitesurfing and windsurfing. The beach\'s long, sandy shores provide ample space for relaxation and sunbathing, with a vibrant atmosphere of beach bars and cafes.',
-    image: 'https://snzproject.com/wp-content/uploads/2023/12/bg2.png'
+    image: 'https://snzproject.com/wp-content/uploads/2025/05/vid_1_5_-scaled.jpg'
   },
 ];
 
@@ -424,8 +424,8 @@ onUnmounted(() => {
         <div class="place-box">
           <div class="text"></div>
         </div>
-        <div class="title-box-1"><div class="title-1">SAINT</div></div>
-        <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
+        <div class="title-box-1"><div class="title-1"></div></div>
+        <div class="title-box-2"><div class="title-2"></div></div>
         <div class="desc">
         </div>
       </div>
@@ -433,8 +433,8 @@ onUnmounted(() => {
       <div class="details" id="details-odd">
         <div class="place-box">
         </div>
-        <div class="title-box-1"><div class="title-1">SAINT </div></div>
-        <div class="title-box-2"><div class="title-2">ANTONIEN</div></div>
+        <div class="title-box-1"><div class="title-1"></div></div>
+        <div class="title-box-2"><div class="title-2"></div></div>
         <div class="desc">
         </div>
       </div>
@@ -560,6 +560,7 @@ onUnmounted(() => {
   font-weight: 600;
   font-size: 72px;
   line-height: 1.1;
+  color: #ffffff;
 }
 
 .title-box-1,

@@ -162,6 +162,7 @@ onMounted(() => {
   font-weight: 700;
   margin-bottom: 2rem;
   color: #333;
+  padding: 0 50px;
 }
 
 .project-nav ul {
@@ -198,7 +199,7 @@ onMounted(() => {
 /* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
-  padding: 2rem 2rem 2rem 400px;
+  padding: 2rem 80px 2rem 300px;
   overflow-y: auto;
   height: calc(100vh - 20px);
   max-height: 1030px;

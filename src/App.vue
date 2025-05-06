@@ -756,6 +756,7 @@ nav > div {
 }
 
 .logo-link {
+  padding-left: 32px;
   display: block;
   transition: transform 0.3s ease;
 }

@@ -67,9 +67,6 @@ watch(() => route.name, (newName) => {
 const _ = (id: string): HTMLElement | null => document.getElementById(id);
 const cards = data.map((i, index: number) => `<div class="card" id="card${index}" style="background-image:url(${i.image})"></div>`).join('');
 const cardContents = data.map((i, index: number) => `<div class="card-content" id="card-content-${index}">
-<div class="content-start"></div>
-<div class="content-title-1">${i.title}</div>
-<div class="content-title-2">${i.title2}</div>
 </div>`).join('');
 const sildeNumbers = data.map((_, index: number) => `<div class="item" id="slide-item-${index}">${index+1}</div>`).join('');
 
@@ -101,7 +98,7 @@ function init() {
   const detailsActive = detailsEven ? "#details-even" : "#details-odd";
   const detailsInactive = detailsEven ? "#details-odd" : "#details-even";
   const { innerHeight: height, innerWidth: width } = window;
-  
+
   // Адаптивные размеры для мобильных устройств
   if (width <= 480) {
     cardWidth = 150;

@@ -105,7 +105,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .landscape-page {
   background-color: #f8f9fa;
   min-height: 100vh;
@@ -256,7 +256,7 @@ onMounted(() => {
   .content {
     overflow-y: auto;
     margin-left: 0;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 300px);
     padding: 1rem 1rem 200px;
   }
 
@@ -293,7 +293,7 @@ onMounted(() => {
       padding: 1rem;
       margin-left: 0;
       height: auto;
-      max-height: calc(100vh - 200px);
+      max-height: calc(100vh - 300px);
       overflow-y: auto;
     }
 

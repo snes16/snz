@@ -1,7 +1,6 @@
 <template>
   <div class="contact-page">
     <div class="contact-content">
-      <h1 class="title">Контакты</h1>
 
       <div class="contact-grid">
         <div class="contact-info">
@@ -146,7 +145,7 @@ const submitForm = async () => {
   min-height: 100vh;
   background-color: #ffffff;
   padding: 0;
-  padding-top: 80px;
+  padding-top: 40px;
   margin-top: 180px;
   color: #333333;
 }
@@ -154,16 +153,17 @@ const submitForm = async () => {
 .contact-content {
   max-width: 100%;
   margin: 0 auto;
-  padding: 2rem 4rem;
+  padding: 0 4rem 2rem;
   position: relative;
+  max-height: 100vh;
+  overflow: auto;
 }
 
 .title {
   font-family: 'Century Gothic', sans-serif;
   font-size: 2.5rem;
   color: #333333;
-  margin-bottom: 3rem;
-  text-align: center;
+  text-align: left;
   font-weight: 700;
 }
 
@@ -187,6 +187,8 @@ const submitForm = async () => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  max-height: 500px;
+  overflow: auto;
 }
 
 .contact-details {
@@ -196,7 +198,7 @@ const submitForm = async () => {
 }
 
 .address, .phone, .email, .instagram {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 1.1rem;
   color: #555555;
   font-weight: 500;
@@ -228,7 +230,7 @@ const submitForm = async () => {
   transition: background-color 0.3s, transform 0.2s;
   font-family: 'Century Gothic', sans-serif;
   font-weight: 600;
-  margin-top: 2rem;
+  margin-left: 100px;
 }
 
 .request-button:hover {
@@ -350,7 +352,7 @@ const submitForm = async () => {
   background-color: #555555;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 992px) {
   .contact-grid {
     grid-template-columns: 350px 1fr;
     gap: 2rem;
@@ -358,15 +360,16 @@ const submitForm = async () => {
 
   .contact-content {
     padding: 2rem;
+    padding-bottom: 200px;
   }
-}
 
-@media (max-width: 992px) {
   .contact-page {
     margin-top: 0;
-    padding: 20px 20px 200px;
-    max-height: calc(100vh - 120px);
-    overflow: auto;
+    padding-top: 0;
+  }
+
+  .request-button {
+    margin-left: 0;
   }
 
   .contact-grid {
@@ -387,10 +390,6 @@ const submitForm = async () => {
 
   .modal-content {
     width: 95%;
-  }
-
-  .contact-content {
-    padding: 1.5rem;
   }
 }
 </style>

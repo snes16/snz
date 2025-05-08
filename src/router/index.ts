@@ -4,6 +4,7 @@ import ArchitectureView from '../views/ArchitectureView.vue'
 import InteriorView from '../views/InteriorView.vue'
 import LandscapeView from '../views/LandscapeView.vue'
 import ContactView from '../views/ContactView.vue'
+import AboutView from '../views/AboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/contacts',
       name: 'contacts',
       component: ContactView
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: AboutView
     }
   ]
 })

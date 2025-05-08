@@ -468,56 +468,62 @@ onMounted(async () => {
   }
 });
 
+const shouldHideOverflow = computed(() => {
+  const routeName = route.name?.toString() || '';
+  return ['architecture', 'interior', 'landscape'].includes(routeName);
+});
+
 onUnmounted(() => {
   cleanupAnimations();
 });
 </script>
 
 <template>
-<div class="app-container">
-  <!-- Only render the indicator on the home page -->
-  <div v-if="isHomePage" class="indicator"></div>
+  <div class="app-container" :class="{'full': isNavCollapsed, 'no-overflow': shouldHideOverflow}">
+    <!-- Only render the indicator on the home page -->
+    <div v-if="isHomePage" class="indicator"></div>
 
-  <nav>
-    <div class="arrow-container">
-      <button class="nav-arrow" @click="toggleNav">
-        <div class="burger-menu" :class="{ 'active': isNavCollapsed }">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
-    </div>
-    <div class="logo-container-desktop">
-      <a href="/" class="logo-link">
-        <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
-            alt="SNZ"
-            style="height: 120px"
-        />
-      </a>
-    </div>
-    <div class="nav-links">
-      <div class="nav-items" :class="{ 'nav-items-collapsed': isNavCollapsed }">
-        <a href="/" class="nav-link active">Главная</a>
-        <a href="/architecture" class="nav-link">Архитектура</a>
-        <a href="/interior" class="nav-link">Интерьер</a>
-        <a href="/landscape" class="nav-link">Ландшафты</a>
-        <a href="/contacts" class="nav-link">Контакты</a>
+    <nav>
+      <div class="arrow-container">
+        <button class="nav-arrow" @click="toggleNav">
+          <div class="burger-menu" :class="{ 'active': isNavCollapsed }">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
       </div>
-    </div>
-    <div class="logo-container-mobile">
-      <a href="/" class="logo-link">
-        <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
-            alt="SNZ"
-            style="height: 120px"
-        />
-      </a>
-    </div>
-  </nav>
+      <div class="logo-container-desktop">
+        <a href="/" class="logo-link">
+          <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
+               alt="SNZ"
+               style="height: 120px"
+          />
+        </a>
+      </div>
+      <div class="nav-links">
+        <div class="nav-items" :class="{ 'nav-items-collapsed': isNavCollapsed }">
+          <a href="/" class="nav-link active">Главная</a>
+          <a href="/about" class="nav-link">О нас</a>
+          <a href="/architecture" class="nav-link">Архитектура</a>
+          <a href="/interior" class="nav-link">Интерьер</a>
+          <a href="/landscape" class="nav-link">Ландшафты</a>
+          <a href="/contacts" class="nav-link">Контакты</a>
+        </div>
+      </div>
+      <div class="logo-container-mobile">
+        <a href="/" class="logo-link">
+          <img src="https://snzproject.com/wp-content/uploads/2024/01/snz_logo_-1-e1705565210397.png"
+               alt="SNZ"
+               style="height: 120px"
+          />
+        </a>
+      </div>
+    </nav>
 
-  <!-- Здесь будет отображаться содержимое маршрутов -->
-  <router-view />
-</div>
+    <!-- Здесь будет отображаться содержимое маршрутов -->
+    <router-view />
+  </div>
 </template>
 
 <style>
@@ -549,6 +555,10 @@ body {
   width: 100%;
   min-height: 100vh;
   position: relative;
+
+  .no-overflow {
+    overflow: hidden;
+  }
 }
 
 .card {
@@ -740,7 +750,7 @@ nav > div {
   padding-bottom: 4px;
   font-weight: 600;
   font-size: 1.8rem;
-  margin-right: 50px;
+  margin-right: 30px; /* Уменьшил отступ для умещения всех пунктов */
 }
 
 .nav-link:hover {
@@ -779,6 +789,23 @@ nav > div {
 }
 
 /* Медиа запросы для адаптивности */
+@media (max-width: 1400px) {
+  .nav-link {
+    font-size: 1.5rem;
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .logo-container-desktop {
+    transform: scale(0.7);
+  }
+  .nav-link {
+    font-size: 1.2rem;
+    margin-right: 20px;
+  }
+}
+
 @media (max-width: 992px) {
   .content-title-1,
   .content-title-2 {
@@ -817,58 +844,14 @@ nav > div {
 
   .nav-link {
     color: white;
-    text-decoration: initial;
-    position: initial;
-    cursor: initial;
-    transition: initial;
-    padding-bottom: initial;
-    font-size: initial;
-    margin-right: initial;
-  }
-
-  .nav-link:hover {
-    opacity: initial;
-    color: initial;
-  }
-
-  .nav-link::after {
-    content: initial;
-    position: initial;
-    bottom: initial;
-    left: initial;
-    width: initial;
-    height: initial;
-    background-color: initial;
-    transition: initial;
-    border-radius: initial;
-  }
-
-  .nav-link:hover::after {
-    width: initial;
-  }
-
-  .nav-link.active::after {
-    width: initial;
-  }
-
-  .logo-link {
-    display: initial;
-    transition: initial;
-  }
-
-  .logo-link:hover {
-    transform: initial;
-  }
-
-  .nav-link {
-    color: white;
     text-decoration: none;
     position: relative;
     cursor: pointer;
     transition: color 0.3s ease, opacity 0.3s ease;
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-top: 5px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 5px 0;
+    padding-bottom: 4px;
   }
 
   .nav-link:hover {
@@ -896,7 +879,6 @@ nav > div {
     width: 100%;
   }
 
-
   nav {
     flex-direction: row;
     position: sticky;
@@ -908,6 +890,19 @@ nav > div {
     align-items: center;
     z-index: 100;
     backdrop-filter: blur(10px);
+  }
+
+  .full {
+    max-height: 100vh;
+    overflow: auto;
+
+    nav {
+      height: 300px;
+    }
+  }
+
+  .no-overflow {
+    overflow: hidden;
   }
 
   .nav-links {
@@ -926,9 +921,10 @@ nav > div {
     outline: none;
     display: flex;
     align-items: center;
-    button {
-      outline: none;
-    }
+  }
+
+  .arrow-container button {
+    outline: none;
   }
 
   .logo-container-mobile {
@@ -962,6 +958,14 @@ nav > div {
 
   .nav-links {
     margin-top: 10px;
+  }
+
+  .nav-items {
+    padding-left: 10px;
+  }
+
+  .nav-link {
+    font-size: 1rem;
   }
 }
 
@@ -1096,8 +1100,8 @@ nav > div {
 }
 
 .burger-menu.active span:nth-child(2) {
-   opacity: 0;
- }
+  opacity: 0;
+}
 
 .burger-menu.active span:nth-child(3) {
   top: 8px;

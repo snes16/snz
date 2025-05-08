@@ -2,7 +2,11 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import gsap from 'gsap';
-import back1 from '../assets/back1.png'
+import back1 from '../assets/back1.png';
+import back2 from '../assets/back2.jpg';
+import back3 from '../assets/back3.png';
+import back4 from '../assets/back4.jpg';
+import back5 from '../assets/back5.jpg';
 
 const data = [
   {
@@ -17,28 +21,28 @@ const data = [
     title: '',
     title2: '',
     description: 'Nagano Prefecture, set within the majestic Japan Alps, is a cultural treasure trove with its historic shrines and temples, particularly the famous Zenkō-ji. The region is also a hotspot for skiing and snowboarding, offering some of the country\'s best powder.',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/8.2-scaled.jpg'
+    image: back2
   },
   {
     place: '',
     title: '',
     title2: '',
     description: 'The journey from the vibrant souks and palaces of Marrakech to the tranquil, starlit sands of Merzouga showcases the diverse splendor of Morocco. Camel treks and desert camps offer an unforgettable immersion into the nomadic way of life.',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/enhanced_1_8-photo-scaled.png'
+    image: back3
   },
   {
     place: '',
     title: '',
     title2: '',
     description: 'Yosemite National Park is a showcase of the American wilderness, revered for its towering granite monoliths, ancient giant sequoias, and thundering waterfalls. The park offers year-round recreational activities, from rock climbing to serene valley walks.',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/manikyur_2_interactive-lightmix_view05_dark.jpg'
+    image: back4
   },
   {
     place: '',
     title: '',
     title2: '',
     description: 'Los Lances Beach in Tarifa is a coastal paradise known for its consistent winds, making it a world-renowned spot for kitesurfing and windsurfing. The beach\'s long, sandy shores provide ample space for relaxation and sunbathing, with a vibrant atmosphere of beach bars and cafes.',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/vid_1_5_-scaled.jpg'
+    image: back5
   },
 ];
 
@@ -726,6 +730,10 @@ onUnmounted(() => {
   .arrow svg {
     width: 20px;
     height: 20px;
+  }
+
+  .pagination {
+    display: none;
   }
 }
 

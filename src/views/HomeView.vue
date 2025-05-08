@@ -2,39 +2,40 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import gsap from 'gsap';
+import back1 from '../assets/back1.png'
 
 const data = [
   {
     place: 'Switzerland Alps',
-    title: '\u2003\u2003ЖК в г. Шали',
+    title: '',
     title2: '',
     description: 'Tucked away in the Switzerland Alps, Saint Antönien offers an idyllic retreat for those seeking tranquility and adventure alike. It\'s a hidden gem for backcountry skiing in winter and boasts lush trails for hiking and mountain biking during the warmer months.',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/scene-13_-scaled.png'
+    image: back1
   },
   {
     place: '',
-    title: 'Леруа Мерлен',
+    title: '',
     title2: '',
     description: 'Nagano Prefecture, set within the majestic Japan Alps, is a cultural treasure trove with its historic shrines and temples, particularly the famous Zenkō-ji. The region is also a hotspot for skiing and snowboarding, offering some of the country\'s best powder.',
     image: 'https://snzproject.com/wp-content/uploads/2025/05/8.2-scaled.jpg'
   },
   {
     place: '',
-    title: 'Визит-центр Чарын',
+    title: '',
     title2: '',
     description: 'The journey from the vibrant souks and palaces of Marrakech to the tranquil, starlit sands of Merzouga showcases the diverse splendor of Morocco. Camel treks and desert camps offer an unforgettable immersion into the nomadic way of life.',
     image: 'https://snzproject.com/wp-content/uploads/2025/05/enhanced_1_8-photo-scaled.png'
   },
   {
     place: '',
-    title: 'Салон "Aneli"',
+    title: '',
     title2: '',
     description: 'Yosemite National Park is a showcase of the American wilderness, revered for its towering granite monoliths, ancient giant sequoias, and thundering waterfalls. The park offers year-round recreational activities, from rock climbing to serene valley walks.',
     image: 'https://snzproject.com/wp-content/uploads/2025/05/manikyur_2_interactive-lightmix_view05_dark.jpg'
   },
   {
     place: '',
-    title: 'Французский сад',
+    title: '',
     title2: '',
     description: 'Los Lances Beach in Tarifa is a coastal paradise known for its consistent winds, making it a world-renowned spot for kitesurfing and windsurfing. The beach\'s long, sandy shores provide ample space for relaxation and sunbathing, with a vibrant atmosphere of beach bars and cafes.',
     image: 'https://snzproject.com/wp-content/uploads/2025/05/vid_1_5_-scaled.jpg'
@@ -414,6 +415,21 @@ onUnmounted(() => {
 
 <template>
   <div class="home-view">
+
+    <div class="static-content">
+      <h1>SnZ Project</h1>
+      <h2>Архитектура. Интерьеры. Ландшафт.</h2>
+      <div class="static-description">
+        <p>Проектируем пространства, которые легко воплотить в жизнь и комфортно использовать. Работаем с жилыми и коммерческими объектами в Алматы и за ее пределами.</p>
+        <p class="highlight-text">Наш подход: продуманная функция, яркая эстетика и реализуемые проекты.</p>
+        <div class="features-list">
+          <div class="feature-item">🔸 Опыт основателей – более 15 лет в профессии</div>
+          <div class="feature-item">🔸 Проекты, готовые к строительству</div>
+          <div class="feature-item">🔸 Эстетика и функция в идеальном балансе</div>
+        </div>
+      </div>
+    </div>
+
     <div id="demo"></div>
 
     <div style="color: black">
@@ -791,6 +807,140 @@ onUnmounted(() => {
   .arrow svg {
     width: 16px;
     height: 16px;
+  }
+}
+
+.static-content {
+  background: rgba(26, 26, 26, 0.6);
+  padding: 30px 40px;
+  border-radius: 25px;
+  position: absolute;
+  top: 25%;
+  left: 82px;
+  z-index: 50;
+  color: white;
+  max-width: 800px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.static-content h1 {
+  font-size: 4.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.static-content h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.static-description p {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  max-width: 700px;
+}
+
+.highlight-text {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 2rem 0;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.feature-item {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 2rem;
+}
+
+/* Адаптивные стили */
+@media (max-width: 1600px) {
+  .static-content {
+    max-width: 450px;
+    max-height: 570px;
+
+    .static-description {
+      overflow: auto;
+      max-height: 280px;
+    }
+  }
+  .static-content h1 {
+    font-size: 3rem;
+  }
+  .static-description p {
+    font-size: 1.4rem;
+  }
+  .feature-item {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .static-content {
+    left: 8%;
+    right: 8%;
+  }
+}
+
+@media (max-width: 992px) {
+  .static-content {
+    max-width: 80%;
+    left: 10%;
+    max-height: 60%;
+    top: 250px;
+
+    .static-description {
+      overflow: auto;
+      max-height: 200px;
+    }
+  }
+  .static-content h1 {
+    font-size: 3rem;
+  }
+  .static-content h2 {
+    font-size: 1.6rem;
+  }
+  .static-description p {
+    font-size: 1.2rem;
+  }
+  .feature-item {
+    font-size: 1.1rem;
+    padding-left: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .static-content h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .static-content h1 {
+    font-size: 2rem;
+  }
+  .static-content h2 {
+    font-size: 1.3rem;
+  }
+  .static-description p {
+    font-size: 1.1rem;
+  }
+  .feature-item {
+    font-size: 1rem;
+    padding-left: 1.5rem;
   }
 }
 </style>

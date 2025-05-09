@@ -200,13 +200,13 @@ onMounted(() => {
 /* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
-  padding: 2rem 80px 2rem 300px;
+  padding: 180px 80px 2rem 300px;
   overflow-y: auto;
   height: calc(100vh - 20px);
   max-height: 1030px;
   margin-left: auto; /* Ширина сайдбара */
   width: 50%;
-  margin-top: -17px;
+  margin-top: 50px;
 }
 
 .project-card {
@@ -259,49 +259,33 @@ onMounted(() => {
 }
 
 
-@media (max-width: 992px) {
-  .page-container {
-    flex-direction: column;
+@media (max-width: 1700px) {
+
+  .content {
+    padding: 100px 80px 2rem 350px;
+    margin-top: 0;
+  }
+
+  .project-image {
+    width: 100%;
+    height: 300px;
   }
 
   .sidebar {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    position: relative;
-    top: 0;
-    border-right: none;
-    border-bottom: 1px solid #eaeaea;
-    overflow-y: visible;
-    padding: 1rem;
-    background-color: transparent;
-  }
+    .page-title {
+      font-size: 30px;
+    }
 
-  .content {
-    height: auto;
-    max-height: none;
-    overflow-y: visible;
-    padding: 1rem;
-    margin-left: 0;
-  }
+    max-width: 300px;
+    padding-right: 0;
 
-  .project-nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .project-nav a {
-    padding: 0.5rem 1rem;
-    border-left: none;
-    border-bottom: 3px solid transparent;
-    font-size: 20px;
-  }
-
-  .project-nav a:hover,
-  .project-nav a.active {
-    border-left-color: transparent;
-    border-bottom-color: var(--primary-color, #ecad29);
+    .project-nav {
+      font-size: 20px;
+      width: 200px;
+      a {
+        font-size: 20px;
+      }
+    }
   }
 }
 @media (max-width: 992px) {

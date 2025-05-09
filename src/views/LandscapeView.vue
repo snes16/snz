@@ -182,7 +182,6 @@ onMounted(() => {
   max-height: 1030px;
   margin-left: auto;
   width: 50%;
-  margin-top: -17px;
 }
 
 .project-card {
@@ -235,119 +234,104 @@ onMounted(() => {
 }
 
 /* Медиа запросы для адаптивности */
-@media (max-width: 992px) {
-  .page-container {
-    flex-direction: column;
+@media (max-width: 1700px) {
+
+  .content {
+    padding: 100px 80px 2rem 350px;
+  }
+
+  .project-image {
+    width: 100%;
+    height: 500px;
   }
 
   .sidebar {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    position: relative;
-    top: 0;
-    border-right: none;
-    border-bottom: 1px solid #eaeaea;
-    overflow-y: visible;
-    padding: 1rem;
-    background-color: transparent;
+    .page-title {
+      font-size: 30px;
+    }
+
+    max-width: 300px;
+    padding-right: 0;
+
+    .project-nav {
+      font-size: 20px;
+      width: 200px;
+      a {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .page-container {
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .sidebar {
+    display: none;
   }
 
   .content {
-    overflow-y: auto;
+    width: 100%;
+    padding: 1rem;
     margin-left: 0;
-    height: calc(100vh - 300px);
-    padding: 1rem 1rem 200px;
+    height: auto;
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
   }
 
-  .project-nav ul {
-    display: flex;
-    flex-wrap: wrap;
+  .project-card {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .project-title {
+    font-size: 1.5rem;
+  }
+
+  .project-description {
+    font-size: 1.1rem;
+  }
+
+  .landscape-page {
+    margin-top: 0;
+  }
+
+  .content {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .project-meta {
+    flex-direction: column;
     gap: 0.5rem;
   }
 
-  .project-nav a {
-    padding: 0.5rem 1rem;
-    border-left: none;
-    border-bottom: 3px solid transparent;
-    font-size: 20px;
+  .project-image {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .landscape-page {
+    margin-top: 0;
   }
 
-  .project-nav a:hover,
-  .project-nav a.active {
-    border-left-color: transparent;
-    border-bottom-color: var(--primary-color, #ecad29);
-  }
-  @media (max-width: 992px) {
-    .page-container {
-      flex-direction: column;
-      height: 100vh;
-    }
-
-    .sidebar {
-      display: none;
-    }
-
-    .content {
-      width: 100%;
-      padding: 1rem;
-      margin-left: 0;
-      height: auto;
-      max-height: calc(100vh - 300px);
-      overflow-y: auto;
-    }
-
-    .project-card {
-      margin-bottom: 3rem;
-      padding-bottom: 2rem;
-    }
-
-    .project-title {
-      font-size: 1.5rem;
-    }
-
-    .project-description {
-      font-size: 1.1rem;
-    }
-
-    .landscape-page {
-      margin-top: 0;
-    }
-
-    .content {
-      overflow: auto;
-      height: 100vh;
-    }
-
-    .project-meta {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .project-image {
-      margin-bottom: 1rem;
-    }
+  .content {
+    height: auto;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
   }
 
-  @media (max-width: 480px) {
-    .landscape-page {
-      margin-top: 0;
-    }
+  .project-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 
-    .content {
-      height: auto;
-      max-height: calc(100vh - 200px);
-      overflow-y: auto;
-    }
-
-    .project-meta {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .project-image {
-      margin-bottom: 1rem;
-    }
+  .project-image {
+    margin-bottom: 1rem;
   }
 }
 </style>

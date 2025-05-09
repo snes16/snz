@@ -49,7 +49,14 @@ const projects = ref([
 const scrollToProject = (projectId: string) => {
   const element = document.getElementById(projectId);
   if (element) {
+    // Immediately set the active project
+    activeProject.value = projectId;
     element.scrollIntoView({ behavior: 'smooth' });
+
+    // Add a small delay to ensure scroll position is updated
+    setTimeout(() => {
+      handleScroll();
+    }, 500);
   }
 };
 
@@ -75,11 +82,21 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-  // Устанавливаем первый проект как активный при загрузке
-  if (projects.value.length > 0) {
-    activeProject.value = projects.value[0].id;
-  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        activeProject.value = entry.target.id;
+      }
+    });
+  }, {
+    threshold: 0.5,
+    rootMargin: '0px 0px -50% 0px'
+  });
+
+  projects.value.forEach(project => {
+    const element = document.getElementById(project.id);
+    if (element) observer.observe(element);
+  });
 });
 </script>
 
@@ -204,8 +221,8 @@ onMounted(() => {
   height: calc(100vh - 20px);
   max-height: 1030px;
   margin-left: auto;
-  margin-top: -17px;
   width: 50%;
+  margin-top: 150px;
 }
 
 .project-card {
@@ -255,6 +272,36 @@ onMounted(() => {
   line-height: 1.6;
   color: #444;
   font-weight: 500;
+}
+
+@media (max-width: 1700px) {
+
+  .content {
+    padding: 0 80px 2rem 350px;
+    margin-top: 0;
+  }
+
+  .project-image {
+    width: 100%;
+    height: 500px;
+  }
+
+  .sidebar {
+    .page-title {
+      font-size: 30px;
+    }
+
+    max-width: 300px;
+    padding-right: 0;
+
+    .project-nav {
+      font-size: 20px;
+      width: 200px;
+      a {
+        font-size: 20px;
+      }
+    }
+  }
 }
 
 @media (max-width: 992px) {

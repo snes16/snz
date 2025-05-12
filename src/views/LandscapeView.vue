@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
+import image65 from '../assets/slider/65.jpg';
+import image66 from '../assets/slider/66.png';
+import image67 from '../assets/slider/67.jpg';
+import image68 from '../assets/slider/68.jpg';
+import image69 from '../assets/slider/69.jpg';
+
 // Данные о проектах в разделе Ландшафт
 const projects = ref([
   {
     id: 'french-garden',
     title: 'Французский сад',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/vid_1_5_-scaled.jpg',
+    images: [
+      image65,
+      image66,
+      image67,
+      image68,
+      image69,
+    ],
     description: 'Проект классического французского сада для частного участка в Алматы. Концепция строится на симметрии, балансе и главной оси, проходящей через весь сад. Архитектурная строгость формованных лип и осевой дорожки смягчается природными элементами: фонтаном-прудом, спроектированным по принципам фен-шуй, прогулочной аллеей с кипарисами и ароматной лавандой, уединенной зоной отдыха с качелями и несколькими точками с классической уличной мебелью. Пространство сочетает регулярную структуру с живыми ароматами и звуками воды, создавая атмосферу гармонии и спокойствия.',
     year: '2025',
     location: 'Частный участок, Алматы'
@@ -14,7 +26,9 @@ const projects = ref([
   {
     id: 'city-square',
     title: 'Территория Зоны семейного отдыха',
-    image: 'https://snzproject.com/wp-content/uploads/2023/12/r6.png',
+    images: [
+      'https://snzproject.com/wp-content/uploads/2023/12/r6.png',
+    ],
     description: 'Общественное пространство, спроектированное с использованием экологичных материалов и принципов устойчивого развития. В проекте предусмотрены зоны для различных видов отдыха, сохранены существующие деревья.',
     year: '2023',
     location: 'Алматинская обл., Верхняя Каскеленская трасса, п. Жандасово'
@@ -23,6 +37,30 @@ const projects = ref([
 
 // Активный проект для подсветки в меню
 const activeProject = ref<string | null>(null);
+// Текущий индекс изображения для каждого слайдера
+const currentImageIndex = ref<Record<string, number>>({});
+
+// Инициализация индексов слайдеров
+projects.value.forEach(project => {
+  currentImageIndex.value[project.id] = 0;
+});
+
+// Функции для управления слайдерами
+const nextImage = (projectId: string) => {
+  const project = projects.value.find(p => p.id === projectId);
+  if (project) {
+    currentImageIndex.value[projectId] =
+        (currentImageIndex.value[projectId] + 1) % project.images.length;
+  }
+};
+
+const prevImage = (projectId: string) => {
+  const project = projects.value.find(p => p.id === projectId);
+  if (project) {
+    currentImageIndex.value[projectId] =
+        (currentImageIndex.value[projectId] - 1 + project.images.length) % project.images.length;
+  }
+};
 
 // Функция для скролла к нужному проекту
 const scrollToProject = (projectId: string) => {
@@ -88,8 +126,39 @@ onMounted(() => {
             :id="project.id"
             class="project-card"
         >
-          <div class="project-image">
-            <img :src="project.image" :alt="project.title">
+          <div class="project-slider">
+            <div class="slider-container">
+              <img
+                  :src="project.images[currentImageIndex[project.id]]"
+                  :alt="project.title"
+                  class="slider-image"
+              >
+              <button
+                  v-if="project.images.length > 1"
+                  class="slider-button prev"
+                  @click="prevImage(project.id)"
+              >
+                &lt;
+              </button>
+              <button
+                  v-if="project.images.length > 1"
+                  class="slider-button next"
+                  @click="nextImage(project.id)"
+              >
+                &gt;
+              </button>
+              <div
+                  v-if="project.images.length > 1"
+                  class="slider-dots"
+              >
+                <span
+                    v-for="(img, index) in project.images"
+                    :key="index"
+                    :class="{ active: currentImageIndex[project.id] === index }"
+                    @click="currentImageIndex[project.id] = index"
+                ></span>
+              </div>
+            </div>
           </div>
           <div class="project-details">
             <h2 class="project-title">{{ project.title }}</h2>
@@ -176,10 +245,10 @@ onMounted(() => {
 /* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
-  padding: 2rem 80px 2rem 300px;
+  padding: 0 80px 2rem 300px;
   overflow-y: auto;
   height: calc(100vh - 20px);
-  max-height: 1030px;
+  max-height: 100vh;
   margin-left: auto;
   width: 50%;
 }
@@ -194,22 +263,92 @@ onMounted(() => {
   border-bottom: none;
 }
 
-.project-image {
+/* Стили для слайдера */
+.project-slider {
   margin-bottom: 1.5rem;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.project-image img {
+.slider-container {
+  position: relative;
   width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.3s ease;
+  height: 0;
+  padding-bottom: 56.25%; /* Соотношение 16:9 */
+  overflow: hidden;
 }
 
-.project-image:hover img {
-  transform: scale(1.01);
+.slider-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease;
+}
+
+.slider-button {
+  position: absolute;
+  top: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.slider-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev {
+  left: 15px;
+}
+
+.next {
+  right: 15px;
+}
+
+.slider-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.slider-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slider-dots span.active {
+  background-color: white;
+}
+
+.slider-dots span:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.project-details {
+  padding: 1rem 0;
 }
 
 .project-title {
@@ -235,14 +374,13 @@ onMounted(() => {
 
 /* Медиа запросы для адаптивности */
 @media (max-width: 1700px) {
-
   .content {
     padding: 100px 80px 2rem 350px;
   }
 
-  .project-image {
-    width: 100%;
+  .slider-container {
     height: 500px;
+    padding-bottom: 0;
   }
 
   .sidebar {
@@ -309,8 +447,8 @@ onMounted(() => {
     gap: 0.5rem;
   }
 
-  .project-image {
-    margin-bottom: 1rem;
+  .slider-container {
+    height: 300px;
   }
 }
 
@@ -330,8 +468,19 @@ onMounted(() => {
     gap: 0.5rem;
   }
 
-  .project-image {
-    margin-bottom: 1rem;
+  .slider-container {
+    height: 200px;
+  }
+
+  .slider-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+
+  .slider-dots span {
+    width: 8px;
+    height: 8px;
   }
 }
 </style>

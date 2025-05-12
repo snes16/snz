@@ -1,12 +1,32 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import image1 from '../assets/slider/1.png';
+import image2 from '../assets/slider/2.png';
+import image3 from '../assets/slider/3.png';
+import image4 from '../assets/slider/4.png';
+import image5 from '../assets/slider/5.png';
+import image6 from '../assets/slider/6.png';
+import image7 from '../assets/slider/7.png';
+import image8 from '../assets/slider/8.png';
+import image9 from '../assets/slider/9.png';
+import image10 from '../assets/slider/10.jpg';
+import image11 from '../assets/slider/11.jpg';
+import image12 from '../assets/slider/12.jpg';
+import image13 from '../assets/slider/13.jpg';
+import image14 from '../assets/slider/14.jpg';
+import image15 from '../assets/slider/15.jpg';
+
 
 // Данные о проектах в разделе Архитектура
 const projects = ref([
   {
     id: 'shali',
     title: 'ЖК в г. Шали',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/scene-13_-scaled.png',
+    images: [
+      image1,
+      image2,
+      image3
+    ],
     description: 'Амбициозный проект в Шали: пять 25-этажных башен комфорт-класса, 7-этажный бизнес-блок и 2-этажное коммерческое здание, объединенные стилобатом. Архитектура в исламском стиле: арки, орнаменты, синие купола. На стилобате — общественная зона с площадками, аллеями и озеленением, подземный паркинг. Безопасность по спецСТУ. Сочетание высотности, национального колорита и современных стандартов.',
     year: '2025',
     location: 'г. Шали, Чеченская Республика'
@@ -14,7 +34,11 @@ const projects = ref([
   {
     id: 'medical',
     title: 'Цех для сборки медицинского оборудования',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/enhanced_11-scaled.png',
+    images: [
+      image4,
+      image5,
+      image6
+    ],
     description: 'В чистом поле села Тайтобе построили современный хайтек-завод по сборке медицинских приборов с энергоэффективным корпусом и модульным общежитием из морских контейнеров для персонала.',
     year: '2024',
     location: 'с. Тайтобе, Акмолинская обл.'
@@ -22,7 +46,11 @@ const projects = ref([
   {
     id: 'charyn',
     title: 'Визит-центр Чарын',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/enhanced_1_8-photo-scaled.png',
+    images: [
+      image7,
+      image8,
+      image9
+    ],
     description: 'Функциональный модульный визит-центр с вентилируемым фасадом гармонично вписан в природный ландшафт, объединяя современные инженерные решения, доступность и продуманную инфраструктуру, включая смотровую площадку, кафе и конференц-зал.',
     year: '2024',
     location: 'Национальный природный парк Чарын, Алматинская область'
@@ -30,7 +58,11 @@ const projects = ref([
   {
     id: 'leroy-merlin',
     title: 'Леруа Мерлен',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/8.2-scaled.jpg',
+    images: [
+      image10,
+      image11,
+      image12
+    ],
     description: 'В Шымкенте построили типовой одноэтажный магазин формата «Леруа Мерлен» с антресольным этажом, металлокаркасной конструкцией и фирменным бело-зелёным дизайном, включающий торговый зал, складскую зону, административные помещения и соцобъекты для персонала.',
     year: '2022',
     location: 'Шымкент, Аль-Фарабийский р-он'
@@ -38,30 +70,55 @@ const projects = ref([
   {
     id: 'lemonadoff',
     title: 'ЖК Лемонадофф',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/0011-scaled.jpg',
+    images: [
+      image14,
+      image13,
+      image15
+    ],
     description: 'В Медеуском районе возводится жилой комплекс комфорт-класса: 13 высоток (9-12 этажей) с 430 квартирами, подземным паркингом, коммерцией и детсадом, гармонично вписанный в сложный рельеф с 20-метровым перепадом высот.',
     year: '2021',
     location: 'Алматы, Медеуский р-н'
   }
 ]);
 
+// Активный проект для подсветки в меню
+const activeProject = ref<string | null>(null);
+// Текущий индекс изображения для каждого слайдера
+const currentImageIndex = ref<Record<string, number>>({});
+
+// Инициализация индексов слайдеров
+projects.value.forEach(project => {
+  currentImageIndex.value[project.id] = 0;
+});
+
+// Функции для управления слайдерами
+const nextImage = (projectId: string) => {
+  const project = projects.value.find(p => p.id === projectId);
+  if (project) {
+    currentImageIndex.value[projectId] =
+        (currentImageIndex.value[projectId] + 1) % project.images.length;
+  }
+};
+
+const prevImage = (projectId: string) => {
+  const project = projects.value.find(p => p.id === projectId);
+  if (project) {
+    currentImageIndex.value[projectId] =
+        (currentImageIndex.value[projectId] - 1 + project.images.length) % project.images.length;
+  }
+};
+
 // Функция для скролла к нужному проекту
 const scrollToProject = (projectId: string) => {
   const element = document.getElementById(projectId);
   if (element) {
-    // Immediately set the active project
     activeProject.value = projectId;
     element.scrollIntoView({ behavior: 'smooth' });
-
-    // Add a small delay to ensure scroll position is updated
     setTimeout(() => {
       handleScroll();
     }, 500);
   }
 };
-
-// Активный проект для подсветки в меню
-const activeProject = ref<string | null>(null);
 
 // Обработчик скролла для отслеживания видимых проектов
 const handleScroll = () => {
@@ -69,7 +126,7 @@ const handleScroll = () => {
     id: project.id,
     element: document.getElementById(project.id)
   }));
-  
+
   for (const { id, element } of projectElements) {
     if (element) {
       const rect = element.getBoundingClientRect();
@@ -108,10 +165,10 @@ onMounted(() => {
         <nav class="project-nav">
           <ul>
             <li v-for="project in projects" :key="project.id">
-              <a 
-                href="javascript:void(0)" 
-                @click="scrollToProject(project.id)"
-                :class="{ active: activeProject === project.id }"
+              <a
+                  href="javascript:void(0)"
+                  @click="scrollToProject(project.id)"
+                  :class="{ active: activeProject === project.id }"
               >
                 {{ project.title }}
               </a>
@@ -119,17 +176,48 @@ onMounted(() => {
           </ul>
         </nav>
       </aside>
-      
+
       <!-- Скроллящаяся правая часть с проектами -->
       <main class="content">
-        <div 
-          v-for="project in projects" 
-          :key="project.id" 
-          :id="project.id" 
-          class="project-card"
+        <div
+            v-for="project in projects"
+            :key="project.id"
+            :id="project.id"
+            class="project-card"
         >
-          <div class="project-image">
-            <img :src="project.image" :alt="project.title">
+          <div class="project-slider">
+            <div class="slider-container">
+              <img
+                  :src="project.images[currentImageIndex[project.id]]"
+                  :alt="project.title"
+                  class="slider-image"
+              >
+              <button
+                  v-if="project.images.length > 1"
+                  class="slider-button prev"
+                  @click="prevImage(project.id)"
+              >
+                &lt;
+              </button>
+              <button
+                  v-if="project.images.length > 1"
+                  class="slider-button next"
+                  @click="nextImage(project.id)"
+              >
+                &gt;
+              </button>
+              <div
+                  v-if="project.images.length > 1"
+                  class="slider-dots"
+              >
+                <span
+                    v-for="(img, index) in project.images"
+                    :key="index"
+                    :class="{ active: currentImageIndex[project.id] === index }"
+                    @click="currentImageIndex[project.id] = index"
+                ></span>
+              </div>
+            </div>
           </div>
           <div class="project-details">
             <h2 class="project-title">{{ project.title }}</h2>
@@ -164,14 +252,14 @@ onMounted(() => {
 /* Стили для фиксированной боковой панели */
 .sidebar {
   width: 600px;
-  position: fixed; /* Изменено с sticky на fixed */
+  position: fixed;
   left: 0;
-  top: 190px; /* Оставляем место под хедер */
+  top: 190px;
   height: calc(100vh - 120px);
   padding: 2rem;
   overflow-y: auto;
-  background-color: #f8f9fa; /* Добавим фон для лучшей читаемости */
-  z-index: 10; /* Чтобы сайдбар был поверх других элементов */
+  background-color: #f8f9fa;
+  z-index: 10;
 }
 
 .page-title {
@@ -216,13 +304,12 @@ onMounted(() => {
 /* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
-  padding: 2rem 80px 2rem 300px;
+  padding: 0 80px 2rem 300px;
   overflow-y: auto;
   height: calc(100vh - 20px);
-  max-height: 1030px;
+  max-height: 100vh;
   margin-left: auto;
   width: 50%;
-  margin-top: 150px;
 }
 
 .project-card {
@@ -235,22 +322,94 @@ onMounted(() => {
   border-bottom: none;
 }
 
-.project-image {
+/* Стили для слайдера */
+
+.project-slider {
   margin-bottom: 1.5rem;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.project-image img {
+.slider-container {
+  position: relative;
   width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.3s ease;
+  height: 0;
+  padding-bottom: 56.25%; /* Соотношение 16:9 */
+  overflow: hidden;
 }
 
-.project-image:hover img {
-  transform: scale(1.01);
+.slider-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease;
+}
+
+.slider-button {
+  position: absolute;
+  top: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.slider-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev {
+  left: 15px;
+}
+
+.next {
+  right: 15px;
+}
+
+.slider-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.slider-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slider-dots span.active {
+  background-color: white;
+}
+
+.slider-dots span:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Стили для деталей проекта */
+.project-details {
+  padding: 1rem 0;
 }
 
 .project-title {
@@ -274,16 +433,16 @@ onMounted(() => {
   font-weight: 500;
 }
 
+/* Адаптивные стили */
 @media (max-width: 1700px) {
-
   .content {
-    padding: 0 80px 2rem 350px;
-    margin-top: 0;
+    padding: 100px 80px 2rem 350px;
   }
 
-  .project-image {
-    width: 100%;
+
+  .slider-container {
     height: 500px;
+    padding-bottom: 0;
   }
 
   .sidebar {
@@ -321,6 +480,7 @@ onMounted(() => {
     height: auto;
     max-height: calc(100vh - 200px);
     overflow-y: auto;
+    margin-top: 0;
   }
 
   .project-card {
@@ -341,38 +501,70 @@ onMounted(() => {
   }
 
   .content {
-    height: auto;
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
+    overflow: auto;
+    height: calc(100vh - 200px);
+    padding-bottom: 200px;
+  }
+
+  .slider-container {
+    height: 350px;
   }
 
   .project-meta {
     flex-direction: column;
     gap: 0.5rem;
   }
-
-  .project-image {
-    margin-bottom: 1rem;
-  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .architecture-page {
     margin-top: 0;
   }
 
   .content {
     overflow: auto;
-    height: 100vh;
+    height: calc(100vh - 200px);
+    padding-bottom: 200px;
+  }
+
+  .slider-container {
+    height: 280px;
+  }
+
+  .slider-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .slider-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .slider-dots span {
+    width: 8px;
+    height: 8px;
   }
 
   .project-meta {
     flex-direction: column;
     gap: 0.5rem;
   }
+}
 
-  .project-image {
-    margin-bottom: 1rem;
+@media (max-width: 480px) {
+  .slider-container {
+    height: 220px;
+  }
+
+  .slider-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .slider-button svg {
+    width: 18px;
+    height: 18px;
   }
 }
 </style>

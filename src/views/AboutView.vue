@@ -15,7 +15,7 @@
           <h2>О студии</h2>
           <p>С 2019 года мы воплощаем архитектурные, интерьерные и ландшафтные проекты. Наш фокус – не просто красивая картинка, а продуманная до мелочей функциональность и эстетика, ориентированная на человека и реализуемая в рамках вашего бюджета.</p>
         </div>
-        <div class="section-image" style="background-image: url('https://snzproject.com/wp-content/uploads/2023/12/bg4.png')"></div>
+        <img class="section-image" src="../assets/bg4.png" alt=""></img>
       </section>
 
       <section class="principles-section">
@@ -85,7 +85,7 @@ const submitForm = () => {
   position: relative;
   height: 70vh;
   min-height: 500px;
-  background-image: url('https://snzproject.com/wp-content/uploads/2023/12/bg3.png');
+  background-image: url('../assets/bg3.png');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -127,7 +127,7 @@ const submitForm = () => {
 .about-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem 4rem;
 }
 
 /* Секции */
@@ -340,8 +340,5 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .about-page {
-    margin-top: 80px;
-  }
 }
 </style>

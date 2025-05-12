@@ -1,12 +1,71 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import image16 from '../assets/slider/16.jpg';
+import image17 from '../assets/slider/17.jpg';
+import image18 from '../assets/slider/18.jpg';
+import image19 from '../assets/slider/19.jpg';
+import image20 from '../assets/slider/20.jpg';
+import image21 from '../assets/slider/21.jpg';
+import image22 from '../assets/slider/22.jpg';
+import image23 from '../assets/slider/23.jpg';
+import image24 from '../assets/slider/24.jpg';
+import image25 from '../assets/slider/25.jpg';
+import image26 from '../assets/slider/26.jpg';
+import image27 from '../assets/slider/27.jpg';
+import image28 from '../assets/slider/28.jpg';
+import image29 from '../assets/slider/29.jpg';
+import image30 from '../assets/slider/30.jpg';
+import image31 from '../assets/slider/31.jpg';
+import image32 from '../assets/slider/32.jpg';
+import image33 from '../assets/slider/33.jpg';
+import image34 from '../assets/slider/34.jpg';
+import image35 from '../assets/slider/35.jpg';
+import image36 from '../assets/slider/36.jpg';
+import image37 from '../assets/slider/37.jpg';
+import image38 from '../assets/slider/38.jpg';
+import image39 from '../assets/slider/39.jpg';
+import image40 from '../assets/slider/40.jpg';
+import image41 from '../assets/slider/41.jpg';
+import image42 from '../assets/slider/42.jpg';
+import image43 from '../assets/slider/43.jpg';
+import image44 from '../assets/slider/44.jpg';
+import image45 from '../assets/slider/45.jpg';
+import image46 from '../assets/slider/46.jpg';
+import image47 from '../assets/slider/47.jpeg';
+import image48 from '../assets/slider/48.jpeg';
+import image49 from '../assets/slider/49.jpeg';
+import image50 from '../assets/slider/50.jpeg';
+import image51 from '../assets/slider/51.jpeg';
+import image52 from '../assets/slider/52.jpeg';
+import image53 from '../assets/slider/53.jpeg';
+import image54 from '../assets/slider/54.jpeg';
+import image55 from '../assets/slider/55.jpeg';
+import image56 from '../assets/slider/56.jpeg';
+import image57 from '../assets/slider/57.jpeg';
+import image58 from '../assets/slider/58.jpeg';
+import image59 from '../assets/slider/59.jpeg';
+import image60 from '../assets/slider/60.jpeg';
+import image61 from '../assets/slider/61.jpeg';
+import image62 from '../assets/slider/62.jpeg';
+import image63 from '../assets/slider/63.jpeg';
+import image64 from '../assets/slider/64.jpeg';
 
 // Данные о проектах в разделе Интерьер
 const projects = ref([
   {
     id: 'apartment-133',
     title: 'Квартира с переосмысленной лоджией',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/elena_plan_for_instagram1_grafika.jpg',
+    images: [
+      image16,
+      image17,
+      image18,
+      image19,
+      image20,
+      image21,
+      image22,
+      image23,
+      image24,
+    ],
     description: 'В Ташкенте перепланировали 81,5 м² квартиру, превратив лоджию в кухню и кабинет, освободив место для гостиной, а спальни оснастили продуманными функциональными зонами — получилось эргономично и нестандартно.',
     year: '2024',
     location: 'г. Ташкент'
@@ -14,7 +73,14 @@ const projects = ref([
   {
     id: 'podium',
     title: 'Салон красоты "Aneli"',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/manikyur_2_interactive-lightmix_view05.jpg',
+    images: [
+      image30,
+      image25,
+      image26,
+      image27,
+      image28,
+      image29,
+    ],
     description: 'В Алматы салон красоты 160 м² преобразили без перепланировки: овальный ресепшн, угловые маникюрные столы и зеркальные шкафы органично вписали в черно-белую "шахматку", создав воздушный интерьер с арками, латунью и продуманным хранением — заказчица лично контролировала каждый этап.',
     year: '2023',
     location: 'г. Алматы'
@@ -22,7 +88,15 @@ const projects = ref([
   {
     id: 'apartment-95',
     title: 'Интерьер квартиры (100 м²)',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/elvira_plan_for_instagram1_grafika.jpg',
+    images: [
+      image31,
+      image32,
+      image33,
+      image34,
+      image35,
+      image36,
+      image37,
+    ],
     description: 'Семейный интерьер с продуманным зонированием: раздвижные перегородки между кухней-гостиной, остров с баром, ванная "2 в 1", скрытая постирочная и детская с полноценным рабочим местом — максимум функциональности без перепланировки.',
     year: '2022',
     location: 'г. Алматы'
@@ -30,7 +104,17 @@ const projects = ref([
   {
     id: 'aneli',
     title: 'Современная классика для семьи',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/gostinnaya-vid1.jpg',
+    images: [
+      image38,
+      image39,
+      image40,
+      image41,
+      image42,
+      image43,
+      image44,
+      image45,
+      image46,
+    ],
     description: 'Просторный интерьер в современной классике для семьи с детьми: светлая кухня-гостиная, три спальни (включая детскую с трансформируемым пространством) и два санузла с умным хранением — элегантно и практично.',
     year: '2024',
     location: 'г. Ташкент'
@@ -38,7 +122,26 @@ const projects = ref([
   {
     id: 'apartment-100',
     title: 'Интерьер квартиры (133 м²)',
-    image: 'https://snzproject.com/wp-content/uploads/2025/05/timur_plan_for_instagram1_grafika.jpg',
+    images: [
+      image47,
+      image48,
+      image49,
+      image50,
+      image51,
+      image52,
+      image53,
+      image54,
+      image55,
+      image56,
+      image57,
+      image58,
+      image59,
+      image60,
+      image61,
+      image62,
+      image63,
+      image64,
+    ],
     description: 'Функциональный семейный интерьер в Ташкенте: кухня-столовая с островом, две детские (включая комнату с двухъярусной кроватью), мастер-спальня с гардеробной и два санузла, дополненные кладовой и хозяйственным помещением — продуманный комфорт для жизни с детьми.',
     year: '2024',
     location: 'г. Ташкент'
@@ -47,6 +150,30 @@ const projects = ref([
 
 // Активный проект для подсветки в меню
 const activeProject = ref<string | null>(null);
+// Текущий индекс изображения для каждого слайдера
+const currentImageIndex = ref<Record<string, number>>({});
+
+// Инициализация индексов слайдеров
+projects.value.forEach(project => {
+  currentImageIndex.value[project.id] = 0;
+});
+
+// Функции для управления слайдерами
+const nextImage = (projectId: string) => {
+  const project = projects.value.find(p => p.id === projectId);
+  if (project) {
+    currentImageIndex.value[projectId] =
+        (currentImageIndex.value[projectId] + 1) % project.images.length;
+  }
+};
+
+const prevImage = (projectId: string) => {
+  const project = projects.value.find(p => p.id === projectId);
+  if (project) {
+    currentImageIndex.value[projectId] =
+        (currentImageIndex.value[projectId] - 1 + project.images.length) % project.images.length;
+  }
+};
 
 // Функция для скролла к нужному проекту
 const scrollToProject = (projectId: string) => {
@@ -112,8 +239,39 @@ onMounted(() => {
             :id="project.id"
             class="project-card"
         >
-          <div class="project-image">
-            <img :src="project.image" :alt="project.title">
+          <div class="project-slider">
+            <div class="slider-container">
+              <img
+                  :src="project.images[currentImageIndex[project.id]]"
+                  :alt="project.title"
+                  class="slider-image"
+              >
+              <button
+                  v-if="project.images.length > 1"
+                  class="slider-button prev"
+                  @click="prevImage(project.id)"
+              >
+                &lt;
+              </button>
+              <button
+                  v-if="project.images.length > 1"
+                  class="slider-button next"
+                  @click="nextImage(project.id)"
+              >
+                &gt;
+              </button>
+              <div
+                  v-if="project.images.length > 1"
+                  class="slider-dots"
+              >
+                <span
+                    v-for="(img, index) in project.images"
+                    :key="index"
+                    :class="{ active: currentImageIndex[project.id] === index }"
+                    @click="currentImageIndex[project.id] = index"
+                ></span>
+              </div>
+            </div>
           </div>
           <div class="project-details">
             <h2 class="project-title">{{ project.title }}</h2>
@@ -148,14 +306,14 @@ onMounted(() => {
 /* Стили для фиксированной боковой панели */
 .sidebar {
   width: 600px;
-  position: fixed; /* Изменено с sticky на fixed */
+  position: fixed;
   left: 0;
-  top: 190px; /* Оставляем место под хедер */
+  top: 190px;
   height: calc(100vh - 120px);
   padding: 2rem;
   overflow-y: auto;
-  background-color: #f8f9fa; /* Добавим фон для лучшей читаемости */
-  z-index: 10; /* Чтобы сайдбар был поверх других элементов */
+  background-color: #f8f9fa;
+  z-index: 10;
 }
 
 .page-title {
@@ -200,13 +358,12 @@ onMounted(() => {
 /* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
-  padding: 180px 80px 2rem 300px;
+  padding: 0 80px 2rem 300px;
   overflow-y: auto;
   height: calc(100vh - 20px);
-  max-height: 1030px;
-  margin-left: auto; /* Ширина сайдбара */
+  max-height: 100vh;
+  margin-left: auto;
   width: 50%;
-  margin-top: 50px;
 }
 
 .project-card {
@@ -219,22 +376,92 @@ onMounted(() => {
   border-bottom: none;
 }
 
-.project-image {
+/* Стили для слайдера */
+.project-slider {
   margin-bottom: 1.5rem;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.project-image img {
+.slider-container {
+  position: relative;
   width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.3s ease;
+  height: 0;
+  padding-bottom: 56.25%; /* Соотношение 16:9 */
+  overflow: hidden;
 }
 
-.project-image:hover img {
-  transform: scale(1.01);
+.slider-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease;
+}
+
+.slider-button {
+  position: absolute;
+  top: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.slider-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev {
+  left: 15px;
+}
+
+.next {
+  right: 15px;
+}
+
+.slider-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.slider-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slider-dots span.active {
+  background-color: white;
+}
+
+.slider-dots span:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+/* Стили для деталей проекта */
+.project-details {
+  padding: 1rem 0;
 }
 
 .project-title {
@@ -258,17 +485,16 @@ onMounted(() => {
   font-weight: 500;
 }
 
-
+/* Адаптивные стили */
 @media (max-width: 1700px) {
-
   .content {
     padding: 100px 80px 2rem 350px;
     margin-top: 0;
   }
 
-  .project-image {
-    width: 100%;
-    height: 300px;
+  .slider-container {
+    height: 400px;
+    padding-bottom: 0;
   }
 
   .sidebar {
@@ -288,6 +514,7 @@ onMounted(() => {
     }
   }
 }
+
 @media (max-width: 992px) {
   .page-container {
     flex-direction: column;
@@ -330,13 +557,13 @@ onMounted(() => {
     padding-bottom: 200px;
   }
 
+  .slider-container {
+    height: 300px;
+  }
+
   .project-meta {
     flex-direction: column;
     gap: 0.5rem;
-  }
-
-  .project-image {
-    margin-bottom: 1rem;
   }
 }
 
@@ -351,13 +578,44 @@ onMounted(() => {
     padding-bottom: 200px;
   }
 
+  .slider-container {
+    height: 250px;
+  }
+
+  .slider-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .slider-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .slider-dots span {
+    width: 8px;
+    height: 8px;
+  }
+
   .project-meta {
     flex-direction: column;
     gap: 0.5rem;
   }
+}
 
-  .project-image {
-    margin-bottom: 1rem;
+@media (max-width: 480px) {
+  .slider-container {
+    height: 200px;
+  }
+
+  .slider-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .slider-button svg {
+    width: 18px;
+    height: 18px;
   }
 }
 </style>

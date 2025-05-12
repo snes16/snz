@@ -825,7 +825,7 @@ onUnmounted(() => {
   position: absolute;
   top: 25%;
   left: 82px;
-  z-index: 50;
+  z-index: 1000;
   color: white;
   max-width: 800px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -876,12 +876,13 @@ onUnmounted(() => {
 /* Адаптивные стили */
 @media (max-width: 1600px) {
   .static-content {
+    top: 30%;
     max-width: 450px;
-    max-height: 570px;
+    max-height: 450px;
 
     .static-description {
       overflow: auto;
-      max-height: 280px;
+      max-height: 150px;
     }
   }
   .static-content h1 {

@@ -314,6 +314,7 @@ const submitForm = async () => {
   border-radius: 4px;
   font-size: 1rem;
   background-color: #f9f9f9;
+  color: #333333;
 }
 
 .checkbox-group {

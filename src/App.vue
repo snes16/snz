@@ -504,7 +504,6 @@ onUnmounted(() => {
       <div class="nav-links">
         <div class="nav-items" :class="{ 'nav-items-collapsed': isNavCollapsed }">
           <a href="/" class="nav-link active">Главная</a>
-          <a href="/about" class="nav-link">О нас</a>
           <a href="/architecture" class="nav-link">Архитектура</a>
           <a href="/interior" class="nav-link">Интерьер</a>
           <a href="/landscape" class="nav-link">Ландшафты</a>
@@ -715,7 +714,7 @@ nav {
   justify-content: space-between;
   padding: 30px 50px;
   font-weight: 600;
-  background-color: #8f9680;
+  background-color: rgba(26, 26, 26, 1);
   backdrop-filter: blur(5px);
 }
 
@@ -888,7 +887,7 @@ nav > div {
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
-    z-index: 100;
+    z-index: 1001;
     backdrop-filter: blur(10px);
   }
 

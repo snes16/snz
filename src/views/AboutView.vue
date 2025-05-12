@@ -31,20 +31,33 @@
         <h2>Нас выбирают, когда нужно:</h2>
         <div class="benefits-grid">
           <div class="benefit-card">
-            <div class="benefit-icon">🏛️</div>
             <p>Разработать комплексный проект, где архитектура, интерьер и ландшафт гармонично дополняют друг друга</p>
           </div>
           <div class="benefit-card">
-            <div class="benefit-icon">🧩</div>
             <p>Найти элегантное решение для сложных исходных данных и ограничений</p>
           </div>
           <div class="benefit-card">
-            <div class="benefit-icon">💡</div>
             <p>Получить не компромисс, а сильную, жизнеспособную концепцию</p>
           </div>
           <div class="benefit-card">
-            <div class="benefit-icon">✨</div>
             <p>Не просто "красивый дизайн", а пространство, продуманное от общей логистики до атмосферы</p>
+          </div>
+        </div>
+      </section>
+      <section class="services-section">
+        <h2>Наши услуги:</h2>
+        <div class="services-grid">
+          <div class="service-card">
+            <p><strong>Проектирование зданий и сооружений</strong><br>Эскизный проект, рабочий проект, прохождение экспертизы</p>
+          </div>
+          <div class="service-card">
+            <p><strong>Ландшафтный дизайн</strong><br>Концептуальное решение, рабочий проект, прохождение экспертизы</p>
+          </div>
+          <div class="service-card">
+            <p><strong>Дизайн интерьера</strong><br>3D визуализация, рабочий проект</p>
+          </div>
+          <div class="service-card">
+            <p><strong>Авторский надзор</strong></p>
           </div>
         </div>
       </section>
@@ -224,6 +237,41 @@ p {
   }
 }
 
+.services-section {
+  margin-top: 5rem;
+}
+
+.services-section h2 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.service-card {
+  background: #f9f9f9;
+  color: #333;
+  padding: 2rem;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-card p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
 .benefit-icon {
   font-size: 2rem;
   margin-bottom: 1rem;
@@ -316,6 +364,10 @@ p {
 
   .tagline {
     font-size: 1.2rem;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
   }
 
   .about-content {

@@ -102,7 +102,7 @@ const submitForm = async () => {
   }
 
   const token = '7473689022:AAEueEmsA-kdeeZxykBrcTvEccpzzq_538k';
-  const chatIds = ['1472870243']; // Добавь сюда нужные chat_id
+  const chatIds = ['1472870243', '729577670']; // Добавь сюда нужные chat_id
 
   const message = `📩 Новая заявка с сайта:\n\n👤 ФИО: ${name}\n📞 Телефон: ${phone}\n📧 Email: ${email}`;
 

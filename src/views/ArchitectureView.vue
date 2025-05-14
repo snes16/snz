@@ -436,7 +436,7 @@ onMounted(() => {
 /* Адаптивные стили */
 @media (max-width: 1700px) {
   .content {
-    padding: 100px 80px 2rem 350webp
+    padding: 100px 80px 2rem 350px;
   }
 
 

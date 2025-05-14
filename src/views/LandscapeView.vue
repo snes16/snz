@@ -374,6 +374,10 @@ onMounted(() => {
 
 /* Медиа запросы для адаптивности */
 @media (max-width: 1700px) {
+  .content {
+    padding: 100px 80px 2rem 350px;
+  }
+
   .slider-container {
     height: 500px;
     padding-bottom: 0;

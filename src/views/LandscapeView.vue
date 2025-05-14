@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-import image65 from '../assets/slider/65.jpg';
-import image66 from '../assets/slider/66.png';
-import image67 from '../assets/slider/67.jpg';
-import image68 from '../assets/slider/68.jpg';
-import image69 from '../assets/slider/69.jpg';
+import image65 from '../assets/slider/65.webp';
+import image66 from '../assets/slider/66.webp';
+import image67 from '../assets/slider/67.webp';
+import image68 from '../assets/slider/68.webp';
+import image69 from '../assets/slider/69.webp';
 
 // Данные о проектах в разделе Ландшафт
 const projects = ref([
@@ -374,10 +374,6 @@ onMounted(() => {
 
 /* Медиа запросы для адаптивности */
 @media (max-width: 1700px) {
-  .content {
-    padding: 100px 80px 2rem 350px;
-  }
-
   .slider-container {
     height: 500px;
     padding-bottom: 0;

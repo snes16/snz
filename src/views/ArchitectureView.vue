@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import image1 from '../assets/slider/1.png';
-import image2 from '../assets/slider/2.png';
-import image3 from '../assets/slider/3.png';
-import image4 from '../assets/slider/4.png';
-import image5 from '../assets/slider/5.png';
-import image6 from '../assets/slider/6.png';
-import image7 from '../assets/slider/7.png';
-import image8 from '../assets/slider/8.png';
-import image9 from '../assets/slider/9.png';
-import image10 from '../assets/slider/10.jpg';
-import image11 from '../assets/slider/11.jpg';
-import image12 from '../assets/slider/12.jpg';
-import image13 from '../assets/slider/13.jpg';
-import image14 from '../assets/slider/14.jpg';
-import image15 from '../assets/slider/15.jpg';
+import image1 from '../assets/slider/1.webp';
+import image2 from '../assets/slider/2.webp';
+import image3 from '../assets/slider/3.webp';
+import image4 from '../assets/slider/4.webp';
+import image5 from '../assets/slider/5.webp';
+import image6 from '../assets/slider/6.webp';
+import image7 from '../assets/slider/7.webp';
+import image8 from '../assets/slider/8.webp';
+import image9 from '../assets/slider/9.webp';
+import image10 from '../assets/slider/10.webp';
+import image11 from '../assets/slider/11.webp';
+import image12 from '../assets/slider/12.webp';
+import image13 from '../assets/slider/13.webp';
+import image14 from '../assets/slider/14.webp';
+import image15 from '../assets/slider/15.webp';
 
 
 // Данные о проектах в разделе Архитектура
@@ -436,7 +436,7 @@ onMounted(() => {
 /* Адаптивные стили */
 @media (max-width: 1700px) {
   .content {
-    padding: 100px 80px 2rem 350px;
+    padding: 100px 80px 2rem 350webp
   }
 
 

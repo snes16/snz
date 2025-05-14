@@ -16,17 +16,22 @@ import image13 from '../assets/slider/13.webp';
 import image14 from '../assets/slider/14.webp';
 import image15 from '../assets/slider/15.webp';
 
+// Тип для проекта
+interface Project {
+  id: string;
+  title: string;
+  images: string[];
+  description: string;
+  year: string;
+  location: string;
+}
 
-// Данные о проектах в разделе Архитектура
-const projects = ref([
+// Данные о проектах
+const projects = ref<Project[]>([
   {
     id: 'shali',
     title: 'ЖК в г. Шали',
-    images: [
-      image1,
-      image2,
-      image3
-    ],
+    images: [image1, image2, image3],
     description: 'Амбициозный проект в Шали: пять 25-этажных башен комфорт-класса, 7-этажный бизнес-блок и 2-этажное коммерческое здание, объединенные стилобатом. Архитектура в исламском стиле: арки, орнаменты, синие купола. На стилобате — общественная зона с площадками, аллеями и озеленением, подземный паркинг. Безопасность по спецСТУ. Сочетание высотности, национального колорита и современных стандартов.',
     year: '2025',
     location: 'г. Шали, Чеченская Республика'
@@ -34,11 +39,7 @@ const projects = ref([
   {
     id: 'medical',
     title: 'Цех для сборки медицинского оборудования',
-    images: [
-      image4,
-      image5,
-      image6
-    ],
+    images: [image4, image5, image6],
     description: 'В чистом поле села Тайтобе построили современный хайтек-завод по сборке медицинских приборов с энергоэффективным корпусом и модульным общежитием из морских контейнеров для персонала.',
     year: '2024',
     location: 'с. Тайтобе, Акмолинская обл.'
@@ -46,11 +47,7 @@ const projects = ref([
   {
     id: 'charyn',
     title: 'Визит-центр Чарын',
-    images: [
-      image7,
-      image8,
-      image9
-    ],
+    images: [image7, image8, image9],
     description: 'Функциональный модульный визит-центр с вентилируемым фасадом гармонично вписан в природный ландшафт, объединяя современные инженерные решения, доступность и продуманную инфраструктуру, включая смотровую площадку, кафе и конференц-зал.',
     year: '2024',
     location: 'Национальный природный парк Чарын, Алматинская область'
@@ -58,11 +55,7 @@ const projects = ref([
   {
     id: 'leroy-merlin',
     title: 'Леруа Мерлен',
-    images: [
-      image10,
-      image11,
-      image12
-    ],
+    images: [image10, image11, image12],
     description: 'В Шымкенте построили типовой одноэтажный магазин формата «Леруа Мерлен» с антресольным этажом, металлокаркасной конструкцией и фирменным бело-зелёным дизайном, включающий торговый зал, складскую зону, административные помещения и соцобъекты для персонала.',
     year: '2022',
     location: 'Шымкент, Аль-Фарабийский р-он'
@@ -70,57 +63,75 @@ const projects = ref([
   {
     id: 'lemonadoff',
     title: 'ЖК Лемонадофф',
-    images: [
-      image14,
-      image13,
-      image15
-    ],
+    images: [image14, image13, image15],
     description: 'В Медеуском районе возводится жилой комплекс комфорт-класса: 13 высоток (9-12 этажей) с 430 квартирами, подземным паркингом, коммерцией и детсадом, гармонично вписанный в сложный рельеф с 20-метровым перепадом высот.',
     year: '2021',
     location: 'Алматы, Медеуский р-н'
   }
 ]);
 
-// Активный проект для подсветки в меню
 const activeProject = ref<string | null>(null);
-// Текущий индекс изображения для каждого слайдера
 const currentImageIndex = ref<Record<string, number>>({});
+const loadedImages = ref<Record<string, boolean[]>>({});
+const isChanging = ref<Record<string, boolean>>({});
 
-// Инициализация индексов слайдеров
+// Инициализация состояний
 projects.value.forEach(project => {
   currentImageIndex.value[project.id] = 0;
+  loadedImages.value[project.id] = Array(project.images.length).fill(false);
+  isChanging.value[project.id] = false;
 });
 
-// Функции для управления слайдерами
-const nextImage = (projectId: string) => {
-  const project = projects.value.find(p => p.id === projectId);
-  if (project) {
-    currentImageIndex.value[projectId] =
-        (currentImageIndex.value[projectId] + 1) % project.images.length;
-  }
+// Предзагрузка всех изображений
+const preloadImages = () => {
+  projects.value.forEach(project => {
+    project.images.forEach((imgSrc, index) => {
+      const img = new Image();
+      img.src = imgSrc;
+      img.onload = () => {
+        loadedImages.value[project.id][index] = true;
+      };
+    });
+  });
 };
 
-const prevImage = (projectId: string) => {
+// Переключение изображений с анимацией
+const changeImage = (projectId: string, direction: 'next' | 'prev') => {
+  if (isChanging.value[projectId]) return;
+
   const project = projects.value.find(p => p.id === projectId);
-  if (project) {
-    currentImageIndex.value[projectId] =
-        (currentImageIndex.value[projectId] - 1 + project.images.length) % project.images.length;
-  }
+  if (!project) return;
+
+  isChanging.value[projectId] = true;
+
+  setTimeout(() => {
+    if (direction === 'next') {
+      currentImageIndex.value[projectId] =
+          (currentImageIndex.value[projectId] + 1) % project.images.length;
+    } else {
+      currentImageIndex.value[projectId] =
+          (currentImageIndex.value[projectId] - 1 + project.images.length) % project.images.length;
+    }
+
+    setTimeout(() => {
+      isChanging.value[projectId] = false;
+    }, 50);
+  }, 10);
 };
 
-// Функция для скролла к нужному проекту
+const nextImage = (projectId: string) => changeImage(projectId, 'next');
+const prevImage = (projectId: string) => changeImage(projectId, 'prev');
+
+// Скролл к проекту
 const scrollToProject = (projectId: string) => {
   const element = document.getElementById(projectId);
   if (element) {
     activeProject.value = projectId;
     element.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
-      handleScroll();
-    }, 500);
   }
 };
 
-// Обработчик скролла для отслеживания видимых проектов
+// Обработчик скролла
 const handleScroll = () => {
   const projectElements = projects.value.map(project => ({
     id: project.id,
@@ -139,6 +150,8 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
+  preloadImages();
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -177,8 +190,7 @@ onMounted(() => {
         </nav>
       </aside>
 
-      <!-- Скроллящаяся правая часть с проектами -->
-      <main class="content">
+      <main class="content" @scroll="handleScroll">
         <div
             v-for="project in projects"
             :key="project.id"
@@ -187,15 +199,25 @@ onMounted(() => {
         >
           <div class="project-slider">
             <div class="slider-container">
-              <img
-                  :src="project.images[currentImageIndex[project.id]]"
-                  :alt="project.title"
-                  class="slider-image"
-              >
+              <transition name="fade" mode="out-in">
+                <div v-if="loadedImages[project.id][currentImageIndex[project.id]]" class="image-wrapper">
+                  <img
+                      :src="project.images[currentImageIndex[project.id]]"
+                      :alt="project.title"
+                      class="slider-image"
+                      :class="{ changing: isChanging[project.id] }"
+                  >
+                </div>
+                <div v-else class="image-loader">
+                  <div class="loader"></div>
+                </div>
+              </transition>
+
               <button
                   v-if="project.images.length > 1"
                   class="slider-button prev"
                   @click="prevImage(project.id)"
+                  :disabled="isChanging[project.id]"
               >
                 &lt;
               </button>
@@ -203,6 +225,7 @@ onMounted(() => {
                   v-if="project.images.length > 1"
                   class="slider-button next"
                   @click="nextImage(project.id)"
+                  :disabled="isChanging[project.id]"
               >
                 &gt;
               </button>
@@ -213,7 +236,10 @@ onMounted(() => {
                 <span
                     v-for="(img, index) in project.images"
                     :key="index"
-                    :class="{ active: currentImageIndex[project.id] === index }"
+                    :class="{
+                    active: currentImageIndex[project.id] === index,
+                    loaded: loadedImages[project.id][index]
+                  }"
                     @click="currentImageIndex[project.id] = index"
                 ></span>
               </div>
@@ -249,7 +275,6 @@ onMounted(() => {
   min-height: calc(100vh - 2rem);
 }
 
-/* Стили для фиксированной боковой панели */
 .sidebar {
   width: 600px;
   position: fixed;
@@ -301,7 +326,6 @@ onMounted(() => {
   background-color: transparent;
 }
 
-/* Стили для скроллящегося контента */
 .content {
   flex-grow: 1;
   padding: 0 80px 2rem 300px;
@@ -322,8 +346,6 @@ onMounted(() => {
   border-bottom: none;
 }
 
-/* Стили для слайдера */
-
 .project-slider {
   margin-bottom: 1.5rem;
   border-radius: 8px;
@@ -336,8 +358,16 @@ onMounted(() => {
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* Соотношение 16:9 */
+  padding-bottom: 56.25%;
   overflow: hidden;
+}
+
+.image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .slider-image {
@@ -347,7 +377,37 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
+}
+
+.slider-image.changing {
+  opacity: 0.7;
+}
+
+.image-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ecad29;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .slider-button {
@@ -364,11 +424,16 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .slider-button:hover {
   background-color: rgba(0, 0, 0, 0.7);
+}
+
+.slider-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .prev {
@@ -394,20 +459,24 @@ onMounted(() => {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.slider-dots span.loaded {
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .slider-dots span.active {
   background-color: white;
+  transform: scale(1.2);
 }
 
 .slider-dots span:hover {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* Стили для деталей проекта */
 .project-details {
   padding: 1rem 0;
 }
@@ -433,12 +502,20 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Адаптивные стили */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @media (max-width: 1700px) {
   .content {
-    padding: 100px 80px 2rem 350px;
+    padding: 200px 80px 2rem 350px;
   }
-
 
   .slider-container {
     height: 500px;
@@ -536,11 +613,6 @@ onMounted(() => {
     height: 36px;
   }
 
-  .slider-button svg {
-    width: 20px;
-    height: 20px;
-  }
-
   .slider-dots span {
     width: 8px;
     height: 8px;
@@ -560,11 +632,6 @@ onMounted(() => {
   .slider-button {
     width: 32px;
     height: 32px;
-  }
-
-  .slider-button svg {
-    width: 18px;
-    height: 18px;
   }
 }
 </style>

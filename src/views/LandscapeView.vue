@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-
 import image65 from '../assets/slider/65.webp';
 import image66 from '../assets/slider/66.webp';
 import image67 from '../assets/slider/67.webp';
@@ -39,27 +38,53 @@ const projects = ref([
 const activeProject = ref<string | null>(null);
 // Текущий индекс изображения для каждого слайдера
 const currentImageIndex = ref<Record<string, number>>({});
+// Состояние загрузки для каждого слайдера
+const loadingStates = ref<Record<string, boolean>>({});
 
-// Инициализация индексов слайдеров
+// Инициализация состояний
 projects.value.forEach(project => {
   currentImageIndex.value[project.id] = 0;
+  loadingStates.value[project.id] = false;
 });
+
+// Предзагрузка соседних изображений
+const preloadImages = (projectId: string) => {
+  const project = projects.value.find(p => p.id === projectId);
+  if (!project) return;
+
+  const current = currentImageIndex.value[projectId];
+  const next = (current + 1) % project.images.length;
+  const prev = (current - 1 + project.images.length) % project.images.length;
+
+  [current, next, prev].forEach(index => {
+    const img = new Image();
+    img.src = project.images[index];
+  });
+};
 
 // Функции для управления слайдерами
 const nextImage = (projectId: string) => {
   const project = projects.value.find(p => p.id === projectId);
-  if (project) {
+  if (project && project.images.length > 1) {
+    loadingStates.value[projectId] = true;
     currentImageIndex.value[projectId] =
         (currentImageIndex.value[projectId] + 1) % project.images.length;
+    preloadImages(projectId);
   }
 };
 
 const prevImage = (projectId: string) => {
   const project = projects.value.find(p => p.id === projectId);
-  if (project) {
+  if (project && project.images.length > 1) {
+    loadingStates.value[projectId] = true;
     currentImageIndex.value[projectId] =
         (currentImageIndex.value[projectId] - 1 + project.images.length) % project.images.length;
-  }
+    preloadImages(projectId);
+  };
+};
+
+const onImageLoad = (projectId: string) => {
+  loadingStates.value[projectId] = false;
 };
 
 // Функция для скролла к нужному проекту
@@ -90,7 +115,21 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
-  // Устанавливаем первый проект как активный при загрузке
+
+  // Предзагрузка изображений для всех проектов
+  projects.value.forEach(project => {
+    // Предзагружаем первое изображение и соседние
+    preloadImages(project.id);
+
+    // Предзагружаем все остальные изображения в фоне
+    setTimeout(() => {
+      project.images.forEach(img => {
+        const image = new Image();
+        image.src = img;
+      });
+    }, 1000);
+  });
+
   if (projects.value.length > 0) {
     activeProject.value = projects.value[0].id;
   }
@@ -128,15 +167,20 @@ onMounted(() => {
         >
           <div class="project-slider">
             <div class="slider-container">
+              <div v-if="loadingStates[project.id]" class="loading-indicator">
+                <div class="spinner"></div>
+              </div>
               <img
                   :src="project.images[currentImageIndex[project.id]]"
                   :alt="project.title"
                   class="slider-image"
+                  @load="onImageLoad(project.id)"
               >
               <button
                   v-if="project.images.length > 1"
                   class="slider-button prev"
                   @click="prevImage(project.id)"
+                  :disabled="loadingStates[project.id]"
               >
                 &lt;
               </button>
@@ -144,6 +188,7 @@ onMounted(() => {
                   v-if="project.images.length > 1"
                   class="slider-button next"
                   @click="nextImage(project.id)"
+                  :disabled="loadingStates[project.id]"
               >
                 &gt;
               </button>
@@ -174,7 +219,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .landscape-page {
   background-color: #f8f9fa;
   min-height: 100vh;
@@ -280,6 +325,32 @@ onMounted(() => {
   overflow: hidden;
 }
 
+.loading-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary-color, #ecad29);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .slider-image {
   position: absolute;
   top: 0;
@@ -287,7 +358,7 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 
 .slider-button {
@@ -304,11 +375,16 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.slider-button:hover {
+.slider-button:hover:not(:disabled) {
   background-color: rgba(0, 0, 0, 0.7);
+}
+
+.slider-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .prev {
@@ -336,17 +412,19 @@ onMounted(() => {
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .slider-dots span.active {
   background-color: white;
+  transform: scale(1.2);
 }
 
 .slider-dots span:hover {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Стили для деталей проекта */
 .project-details {
   padding: 1rem 0;
 }
@@ -375,7 +453,7 @@ onMounted(() => {
 /* Медиа запросы для адаптивности */
 @media (max-width: 1700px) {
   .content {
-    padding: 100px 80px 2rem 350px;
+    padding: 200px 80px 2rem 350px;
   }
 
   .slider-container {

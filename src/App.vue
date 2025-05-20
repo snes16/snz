@@ -471,7 +471,7 @@ onMounted(async () => {
 
 const shouldHideOverflow = computed(() => {
   const routeName = route.name?.toString() || '';
-  return ['architecture', 'interior', 'landscape'].includes(routeName);
+  return ['architecture', 'interior', 'landscape', ''].includes(routeName);
 });
 
 onUnmounted(() => {

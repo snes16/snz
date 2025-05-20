@@ -333,7 +333,7 @@ p {
 @media (max-width: 992px) {
   .about-page {
     padding-top: 0;
-    padding-bottom: 200px;
+    padding-bottom: 300px;
   }
   .about-hero {
     height: 50vh;

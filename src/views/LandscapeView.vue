@@ -225,7 +225,6 @@ onMounted(() => {
   min-height: 100vh;
   color: #333;
   padding-top: 1rem;
-  margin-top: 185px;
 }
 
 .page-container {
@@ -296,6 +295,7 @@ onMounted(() => {
   max-height: 100vh;
   margin-left: auto;
   width: 50%;
+  padding-top: 185px !important;
 }
 
 .project-card {
@@ -491,7 +491,7 @@ onMounted(() => {
 
   .content {
     width: 100%;
-    padding: 1rem;
+    padding: 1rem !important;
     margin-left: 0;
     height: auto;
     max-height: calc(100vh - 300px);

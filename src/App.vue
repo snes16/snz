@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, computed, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { Analytics } from '@vercel/analytics/nuxt'
 import gsap from 'gsap';
 
 let data = [
@@ -479,6 +480,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <analytics/>
   <div class="app-container" :class="{'full': isNavCollapsed, 'no-overflow': shouldHideOverflow}">
     <!-- Only render the indicator on the home page -->
     <div v-if="isHomePage" class="indicator"></div>
